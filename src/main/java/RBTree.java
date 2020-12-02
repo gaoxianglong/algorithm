@@ -252,39 +252,71 @@ public class RBTree<T> {
     void d_fixup(Node<T> n1, Node<T> n2) {
         Node<T> bro = null;
         while ((Objects.isNull(n1) || n1.color == Color.BLACK) && root != n1) {
-if (n2.left == n1) {
-    bro = n2.right;
-    if (bro.color == Color.RED) {
-        bro.color = Color.BLACK;
-        n2.color = Color.RED;
-        leftRotate(n2);
-        bro = n2.right;
-    }
-    if ((Objects.isNull(bro.left) || bro.left.color == Color.BLACK) && (Objects.isNull(bro.right) || bro.right.color == Color.BLACK)) {
-        if (n2.color == Color.RED) {
-            n2.color = Color.BLACK;
-            bro.color = Color.RED;
-            break;
-        } else {
-            bro.color = Color.RED;
-            n1 = n2;
-            n2 = n1.parent;
-        }
-    } else {
-        if (Objects.nonNull(bro.left) && bro.left.color == Color.RED) {
-            bro.left.color = n2.color;
-            n2.color = Color.BLACK;
-            rightRotate(bro);
-            leftRotate(n2);
-        } else if (Objects.nonNull(bro.right) && bro.right.color == Color.RED) {
-            bro.color = n2.color;
-            n2.color = Color.BLACK;
-            bro.right.color = Color.BLACK;
-            leftRotate(n2);
-        }
-        break;
-    }
-}
+            if (n2.left == n1) {
+                bro = n2.right;
+                if (bro.color == Color.RED) {
+                    bro.color = Color.BLACK;
+                    n2.color = Color.RED;
+                    leftRotate(n2);
+                    bro = n2.right;
+                }
+                if ((Objects.isNull(bro.left) || bro.left.color == Color.BLACK) && (Objects.isNull(bro.right) || bro.right.color == Color.BLACK)) {
+                    if (n2.color == Color.RED) {
+                        n2.color = Color.BLACK;
+                        bro.color = Color.RED;
+                        break;
+                    } else {
+                        bro.color = Color.RED;
+                        n1 = n2;
+                        n2 = n1.parent;
+                    }
+                } else {
+                    if (Objects.nonNull(bro.left) && bro.left.color == Color.RED) {
+                        bro.left.color = n2.color;
+                        n2.color = Color.BLACK;
+                        rightRotate(bro);
+                        leftRotate(n2);
+                    } else if (Objects.nonNull(bro.right) && bro.right.color == Color.RED) {
+                        bro.color = n2.color;
+                        n2.color = Color.BLACK;
+                        bro.right.color = Color.BLACK;
+                        leftRotate(n2);
+                    }
+                    break;
+                }
+            } else {
+                bro = n2.left;
+                if (bro.color == Color.RED) {
+                    bro.color = Color.BLACK;
+                    n2.color = Color.RED;
+                    rightRotate(n2);
+                    bro = n2.left;
+                }
+                if ((Objects.isNull(bro.left) || bro.left.color == Color.BLACK) && (Objects.isNull(bro.right) || bro.right.color == Color.BLACK)) {
+                    if (n2.color == Color.RED) {
+                        n2.color = Color.BLACK;
+                        bro.color = Color.RED;
+                        break;
+                    } else {
+                        bro.color = Color.RED;
+                        n1 = n2;
+                        n2 = n1.parent;
+                    }
+                } else {
+                    if (Objects.nonNull(bro.right) && bro.right.color == Color.RED) {
+                        bro.right.color = n2.color;
+                        n2.color = Color.BLACK;
+                        leftRotate(bro);
+                        rightRotate(n2);
+                    } else if (Objects.nonNull(bro.left) && bro.left.color == Color.RED) {
+                        bro.color = n2.color;
+                        n2.color = Color.BLACK;
+                        bro.left.color = Color.BLACK;
+                        rightRotate(n2);
+                    }
+                    break;
+                }
+            }
         }
         if (Objects.nonNull(n1)) {
             n1.color = Color.BLACK;
@@ -358,17 +390,17 @@ if (n2.left == n1) {
     }
 
     public static void main(String[] agrs) {
-//        Integer[] temp = {200, 100, 300, 10, 160, 250, 350, 5, 50, 150, 170, 180, 210};
-//        RBTree<Integer> tree = new RBTree<>();
-//        Arrays.asList(temp).forEach(x -> tree.insert(x, x));
-//        tree.inOrder();
-//        System.out.printf("min:%s,max:%s,size:%s,height:%s\n", tree.getMin(), tree.getMax(), tree.getSize(), tree.getHeight());
-//        System.out.printf("node:%s,succee:%s\n", tree.getNode(50), tree.getSucceedNode(10));
-//        System.out.printf("delete:%s\n", tree.delete(180));
-//        System.out.printf("delete:%s\n", tree.delete(200));
-//        System.out.printf("delete:%s\n", tree.delete(160));
-//        tree.inOrder();
-//        tree.getBlackHeight();
+        Integer[] temp = {200, 100, 300, 10, 160, 250, 350, 5, 50, 150, 170, 180, 210};
+        RBTree<Integer> tree = new RBTree<>();
+        Arrays.asList(temp).forEach(x -> tree.insert(x, x));
+        tree.inOrder();
+        System.out.printf("min:%s,max:%s,size:%s,height:%s\n", tree.getMin(), tree.getMax(), tree.getSize(), tree.getHeight());
+        System.out.printf("node:%s,succee:%s\n", tree.getNode(50), tree.getSucceedNode(10));
+        System.out.printf("delete:%s\n", tree.delete(180));
+        System.out.printf("delete:%s\n", tree.delete(200));
+        System.out.printf("delete:%s\n", tree.delete(160));
+        tree.inOrder();
+        tree.getBlackHeight();
 
 //        Integer[] temp = {200, 100, 300, 250, 400, 210};
 //        RBTree<Integer> tree = new RBTree<>();
@@ -378,11 +410,11 @@ if (n2.left == n1) {
 //        tree.inOrder();
 //        tree.getBlackHeight();
 
-        Integer[] temp = {200, 100, 300, 250};
-        RBTree<Integer> tree = new RBTree<>();
-        Arrays.asList(temp).forEach(x -> tree.insert(x, x));
-        tree.delete(100);
-        tree.inOrder();
-        tree.getBlackHeight();
+//        Integer[] temp = {200, 100, 300, 250};
+//        RBTree<Integer> tree = new RBTree<>();
+//        Arrays.asList(temp).forEach(x -> tree.insert(x, x));
+//        tree.delete(100);
+//        tree.inOrder();
+//        tree.getBlackHeight();
     }
 }
