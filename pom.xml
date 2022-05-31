@@ -7,7 +7,7 @@
     <artifactId>algorithm</artifactId>
     <version>1.0-SNAPSHOT</version>
     <properties>
-        <java-version>1.8</java-version>
+        <java-version>15</java-version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <build>
@@ -18,8 +18,8 @@
                 <version>3.0</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>${java-version}</source>
+                    <target>${java-version}</target>
                     <compilerArguments>
                         <verbose/>
                         <extdirs>${project.basedir}/lib</extdirs>
@@ -28,12 +28,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.openjdk.jol</groupId>
-            <artifactId>jol-core</artifactId>
-            <version>0.14</version>
-        </dependency>
-    </dependencies>
 </project>

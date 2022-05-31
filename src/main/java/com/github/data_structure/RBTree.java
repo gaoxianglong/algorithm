@@ -1,4 +1,4 @@
-/*
+package com.github.data_structure;/*
  * Copyright 2019-2119 gao_xianglong@sina.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
