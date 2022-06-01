@@ -29,13 +29,13 @@ import java.util.Objects;
  * @date created in 2022/5/31 22:32
  */
 public class BinarySearch {
-    private Integer[] array;
+    Integer[] array;
 
-    protected BinarySearch(Integer[] array) {
+    BinarySearch(Integer[] array) {
         this.array = array;
     }
 
-    protected Integer search(Integer target) {
+    Integer search(Integer target) {
         Objects.requireNonNull(target);
         var begin = 0;
         var end = array.length;
