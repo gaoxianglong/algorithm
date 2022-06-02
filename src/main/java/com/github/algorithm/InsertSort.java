@@ -19,6 +19,8 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
+ * 插入排序
+ * <p>
  * 和冒泡排序类似,就是拿排序元素和它前面的元素进行比较,如果小于前面的元素,则前后元素位置互换,
  * 直至比较完所有大于它的元素.
  * <p>
@@ -37,9 +39,6 @@ public class InsertSort {
 
     Integer[] sort() {
         Objects.requireNonNull(array);
-        if (array.length < 1) {
-            return null;
-        }
         for (var i = 0; i < array.length; i++) {
             var temp = array[i];
             var j = i;
