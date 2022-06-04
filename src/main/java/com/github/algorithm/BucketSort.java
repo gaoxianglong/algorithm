@@ -33,28 +33,25 @@ import java.util.Objects;
  * @date created in 2022/6/2 18:19
  */
 public class BucketSort {
-    int[] after;
-    int[] before;
+    int[] source;
+    int[] target;
 
-    BucketSort(int length, int[] array) {
-        after = new int[length];
-        this.before = array;
+    BucketSort(int[] array) {
+        var length = Arrays.stream(array).max().getAsInt() + 1;
+        target = new int[length];
+        this.source = array;
     }
 
     BucketSort sort() {
-        Objects.requireNonNull(before);
-        if (before.length < 1) {
-            return null;
-        }
-        for (var i = 0; i < before.length; i++) {
-            after[before[i]]++;
+        for (var i = 0; i < source.length; i++) {
+            target[source[i]]++;
         }
         return this;
     }
 
     void print() {
-        for (var i = 0; i < after.length; i++) {
-            for (var j = 0; j < after[i]; j++) {
+        for (var i = 0; i < target.length; i++) {
+            for (var j = 0; j < target[i]; j++) {
                 System.out.println(i);
             }
         }
@@ -62,8 +59,6 @@ public class BucketSort {
 
     public static void main(String[] args) {
         var array = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 1000};
-        // 较大资源浪费
-        var length = Arrays.stream(array).max().getAsInt() + 1;
-        new BucketSort(length, array).sort().print();
+        new BucketSort(array).sort().print();
     }
 }
