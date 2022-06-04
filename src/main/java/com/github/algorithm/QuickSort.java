@@ -47,7 +47,7 @@ public class QuickSort {
         }
         var l = begin;
         var r = end;
-        var temp = array[begin];
+        var temp = array[l];
         while (l < r) {
             while (l < r && array[r] > temp) {
                 r--;

@@ -5,11 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="07b2a524-0ff7-47ab-85c6-5a1c982c22d2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/github/algorithm/BucketSort.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/github/algorithm/QuickSort.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/github/data_structure/Array.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/github/data_structure/HashTable.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/github/data_structure/Queue.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/github/algorithm/BinarySearch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/algorithm/BinarySearch.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/github/algorithm/InsertSort.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/algorithm/InsertSort.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/github/algorithm/QuickSort.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/algorithm/QuickSort.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,13 +61,13 @@
       <recent name="com.github.data_structure" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.QuickSort">
-    <configuration name="BinarySearch" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.github.algorithm.BinarySearch" />
+  <component name="RunManager" selected="Application.Array">
+    <configuration name="Array" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.github.data_structure.Array" />
       <module name="algorithm" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.github.algorithm.*" />
+          <option name="PATTERN" value="com.github.data_structure.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -74,12 +75,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="BinarySearchTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.github.algorithm.BinarySearchTest" />
+    <configuration name="Hash" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.github.data_structure.Hash" />
       <module name="algorithm" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.github.algorithm.*" />
+          <option name="PATTERN" value="com.github.data_structure.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -87,12 +88,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="BucketSort" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.github.algorithm.BucketSort" />
+    <configuration name="HashTable" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.github.data_structure.HashTable" />
       <module name="algorithm" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.github.algorithm.*" />
+          <option name="PATTERN" value="com.github.data_structure.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -100,12 +101,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="InsertSort" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.github.algorithm.InsertSort" />
+    <configuration name="Queue" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.github.data_structure.Queue" />
       <module name="algorithm" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.github.algorithm.*" />
+          <option name="PATTERN" value="com.github.data_structure.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -141,11 +142,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Array" />
+        <item itemvalue="Application.Queue" />
+        <item itemvalue="Application.HashTable" />
+        <item itemvalue="Application.Hash" />
         <item itemvalue="Application.QuickSort" />
-        <item itemvalue="Application.BucketSort" />
-        <item itemvalue="Application.InsertSort" />
-        <item itemvalue="Application.BinarySearchTest" />
-        <item itemvalue="Application.BinarySearch" />
       </list>
     </recent_temporary>
   </component>
@@ -160,7 +161,9 @@
       <workItem from="1654007124801" duration="342000" />
       <workItem from="1654009240414" duration="3096000" />
       <workItem from="1654094105963" duration="3781000" />
-      <workItem from="1654164925694" duration="9009000" />
+      <workItem from="1654164925694" duration="9716000" />
+      <workItem from="1654253265989" duration="3077000" />
+      <workItem from="1654308630989" duration="8339000" />
     </task>
     <servers />
   </component>
@@ -168,67 +171,80 @@
     <option name="version" value="3" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="2403" y="264" key="#xdebugger.evaluate" timestamp="1654170406591">
+    <state x="2645" y="313" key="#xdebugger.evaluate" timestamp="1654313667643">
       <screen x="1680" y="25" width="1920" height="1055" />
     </state>
-    <state x="2403" y="264" key="#xdebugger.evaluate/1680.25.1920.1055/0.25.1680.937@1680.25.1920.1055" timestamp="1654011169088" />
+    <state x="844" y="281" key="#xdebugger.evaluate/1680.25.1920.1055/0.25.1680.937@1680.25.1920.1055" timestamp="1654309982297" />
+    <state x="2645" y="313" key="#xdebugger.evaluate/1680.25.1920.1055/0.25.1680.940@1680.25.1920.1055" timestamp="1654313667643" />
     <state x="2403" y="264" key="#xdebugger.evaluate/1680.25.1920.1055/0.25.1680.942@1680.25.1920.1055" timestamp="1654170406591" />
     <state width="435" height="466" key="DebuggerActiveHint" timestamp="1654170447051">
       <screen x="1680" y="25" width="1920" height="1055" />
     </state>
     <state width="435" height="466" key="DebuggerActiveHint/1680.25.1920.1055/0.25.1680.942@1680.25.1920.1055" timestamp="1654170447051" />
-    <state width="1878" height="248" key="GridCell.Tab.0.bottom" timestamp="1654180328295">
+    <state width="1878" height="183" key="GridCell.Tab.0.bottom" timestamp="1654324149484">
       <screen x="1680" y="25" width="1920" height="1055" />
     </state>
-    <state width="1878" height="354" key="GridCell.Tab.0.bottom/1680.25.1920.1055/0.25.1680.937@1680.25.1920.1055" timestamp="1654012112614" />
-    <state width="1878" height="287" key="GridCell.Tab.0.bottom/1680.25.1920.1055/0.25.1680.940@1680.25.1920.1055" timestamp="1654166983866" />
-    <state width="1878" height="248" key="GridCell.Tab.0.bottom/1680.25.1920.1055/0.25.1680.942@1680.25.1920.1055" timestamp="1654180328295" />
-    <state width="1878" height="248" key="GridCell.Tab.0.center" timestamp="1654180328294">
+    <state width="1638" height="480" key="GridCell.Tab.0.bottom/0.25.1680.937@0.25.1680.937" timestamp="1654275691706" />
+    <state width="1878" height="363" key="GridCell.Tab.0.bottom/1680.25.1920.1055/0.25.1680.937@1680.25.1920.1055" timestamp="1654310034089" />
+    <state width="1878" height="183" key="GridCell.Tab.0.bottom/1680.25.1920.1055/0.25.1680.940@1680.25.1920.1055" timestamp="1654324149484" />
+    <state width="1878" height="183" key="GridCell.Tab.0.bottom/1680.25.1920.1055/0.25.1680.942@1680.25.1920.1055" timestamp="1654315833642" />
+    <state width="1878" height="183" key="GridCell.Tab.0.center" timestamp="1654324149483">
       <screen x="1680" y="25" width="1920" height="1055" />
     </state>
-    <state width="1878" height="354" key="GridCell.Tab.0.center/1680.25.1920.1055/0.25.1680.937@1680.25.1920.1055" timestamp="1654012112612" />
-    <state width="1878" height="287" key="GridCell.Tab.0.center/1680.25.1920.1055/0.25.1680.940@1680.25.1920.1055" timestamp="1654166983865" />
-    <state width="1878" height="248" key="GridCell.Tab.0.center/1680.25.1920.1055/0.25.1680.942@1680.25.1920.1055" timestamp="1654180328294" />
-    <state width="1878" height="248" key="GridCell.Tab.0.left" timestamp="1654180328294">
+    <state width="1638" height="480" key="GridCell.Tab.0.center/0.25.1680.937@0.25.1680.937" timestamp="1654275691706" />
+    <state width="1878" height="363" key="GridCell.Tab.0.center/1680.25.1920.1055/0.25.1680.937@1680.25.1920.1055" timestamp="1654310034088" />
+    <state width="1878" height="183" key="GridCell.Tab.0.center/1680.25.1920.1055/0.25.1680.940@1680.25.1920.1055" timestamp="1654324149483" />
+    <state width="1878" height="183" key="GridCell.Tab.0.center/1680.25.1920.1055/0.25.1680.942@1680.25.1920.1055" timestamp="1654315833641" />
+    <state width="1878" height="183" key="GridCell.Tab.0.left" timestamp="1654324149483">
       <screen x="1680" y="25" width="1920" height="1055" />
     </state>
-    <state width="1878" height="354" key="GridCell.Tab.0.left/1680.25.1920.1055/0.25.1680.937@1680.25.1920.1055" timestamp="1654012112611" />
-    <state width="1878" height="287" key="GridCell.Tab.0.left/1680.25.1920.1055/0.25.1680.940@1680.25.1920.1055" timestamp="1654166983865" />
-    <state width="1878" height="248" key="GridCell.Tab.0.left/1680.25.1920.1055/0.25.1680.942@1680.25.1920.1055" timestamp="1654180328294" />
-    <state width="1878" height="248" key="GridCell.Tab.0.right" timestamp="1654180328294">
+    <state width="1638" height="480" key="GridCell.Tab.0.left/0.25.1680.937@0.25.1680.937" timestamp="1654275691706" />
+    <state width="1878" height="363" key="GridCell.Tab.0.left/1680.25.1920.1055/0.25.1680.937@1680.25.1920.1055" timestamp="1654310034088" />
+    <state width="1878" height="183" key="GridCell.Tab.0.left/1680.25.1920.1055/0.25.1680.940@1680.25.1920.1055" timestamp="1654324149483" />
+    <state width="1878" height="183" key="GridCell.Tab.0.left/1680.25.1920.1055/0.25.1680.942@1680.25.1920.1055" timestamp="1654315833641" />
+    <state width="1878" height="183" key="GridCell.Tab.0.right" timestamp="1654324149484">
       <screen x="1680" y="25" width="1920" height="1055" />
     </state>
-    <state width="1878" height="354" key="GridCell.Tab.0.right/1680.25.1920.1055/0.25.1680.937@1680.25.1920.1055" timestamp="1654012112613" />
-    <state width="1878" height="287" key="GridCell.Tab.0.right/1680.25.1920.1055/0.25.1680.940@1680.25.1920.1055" timestamp="1654166983866" />
-    <state width="1878" height="248" key="GridCell.Tab.0.right/1680.25.1920.1055/0.25.1680.942@1680.25.1920.1055" timestamp="1654180328294" />
-    <state width="1878" height="248" key="GridCell.Tab.1.bottom" timestamp="1654180328296">
+    <state width="1638" height="480" key="GridCell.Tab.0.right/0.25.1680.937@0.25.1680.937" timestamp="1654275691706" />
+    <state width="1878" height="363" key="GridCell.Tab.0.right/1680.25.1920.1055/0.25.1680.937@1680.25.1920.1055" timestamp="1654310034089" />
+    <state width="1878" height="183" key="GridCell.Tab.0.right/1680.25.1920.1055/0.25.1680.940@1680.25.1920.1055" timestamp="1654324149484" />
+    <state width="1878" height="183" key="GridCell.Tab.0.right/1680.25.1920.1055/0.25.1680.942@1680.25.1920.1055" timestamp="1654315833642" />
+    <state width="1878" height="269" key="GridCell.Tab.1.bottom" timestamp="1654314562893">
       <screen x="1680" y="25" width="1920" height="1055" />
     </state>
-    <state width="1878" height="354" key="GridCell.Tab.1.bottom/1680.25.1920.1055/0.25.1680.937@1680.25.1920.1055" timestamp="1654012112615" />
-    <state width="1878" height="287" key="GridCell.Tab.1.bottom/1680.25.1920.1055/0.25.1680.940@1680.25.1920.1055" timestamp="1654166983867" />
-    <state width="1878" height="248" key="GridCell.Tab.1.bottom/1680.25.1920.1055/0.25.1680.942@1680.25.1920.1055" timestamp="1654180328296" />
-    <state width="1878" height="248" key="GridCell.Tab.1.center" timestamp="1654180328296">
+    <state width="1638" height="480" key="GridCell.Tab.1.bottom/0.25.1680.937@0.25.1680.937" timestamp="1654275691708" />
+    <state width="1878" height="363" key="GridCell.Tab.1.bottom/1680.25.1920.1055/0.25.1680.937@1680.25.1920.1055" timestamp="1654310030309" />
+    <state width="1878" height="269" key="GridCell.Tab.1.bottom/1680.25.1920.1055/0.25.1680.940@1680.25.1920.1055" timestamp="1654314562893" />
+    <state width="1878" height="248" key="GridCell.Tab.1.bottom/1680.25.1920.1055/0.25.1680.942@1680.25.1920.1055" timestamp="1654181316401" />
+    <state width="1878" height="269" key="GridCell.Tab.1.center" timestamp="1654314562892">
       <screen x="1680" y="25" width="1920" height="1055" />
     </state>
-    <state width="1878" height="354" key="GridCell.Tab.1.center/1680.25.1920.1055/0.25.1680.937@1680.25.1920.1055" timestamp="1654012112614" />
-    <state width="1878" height="287" key="GridCell.Tab.1.center/1680.25.1920.1055/0.25.1680.940@1680.25.1920.1055" timestamp="1654166983866" />
-    <state width="1878" height="248" key="GridCell.Tab.1.center/1680.25.1920.1055/0.25.1680.942@1680.25.1920.1055" timestamp="1654180328296" />
-    <state width="1878" height="248" key="GridCell.Tab.1.left" timestamp="1654180328295">
+    <state width="1638" height="480" key="GridCell.Tab.1.center/0.25.1680.937@0.25.1680.937" timestamp="1654275691707" />
+    <state width="1878" height="363" key="GridCell.Tab.1.center/1680.25.1920.1055/0.25.1680.937@1680.25.1920.1055" timestamp="1654310030308" />
+    <state width="1878" height="269" key="GridCell.Tab.1.center/1680.25.1920.1055/0.25.1680.940@1680.25.1920.1055" timestamp="1654314562892" />
+    <state width="1878" height="248" key="GridCell.Tab.1.center/1680.25.1920.1055/0.25.1680.942@1680.25.1920.1055" timestamp="1654181316401" />
+    <state width="1878" height="269" key="GridCell.Tab.1.left" timestamp="1654314562892">
       <screen x="1680" y="25" width="1920" height="1055" />
     </state>
-    <state width="1878" height="354" key="GridCell.Tab.1.left/1680.25.1920.1055/0.25.1680.937@1680.25.1920.1055" timestamp="1654012112614" />
-    <state width="1878" height="287" key="GridCell.Tab.1.left/1680.25.1920.1055/0.25.1680.940@1680.25.1920.1055" timestamp="1654166983866" />
-    <state width="1878" height="248" key="GridCell.Tab.1.left/1680.25.1920.1055/0.25.1680.942@1680.25.1920.1055" timestamp="1654180328295" />
-    <state width="1878" height="248" key="GridCell.Tab.1.right" timestamp="1654180328296">
+    <state width="1638" height="480" key="GridCell.Tab.1.left/0.25.1680.937@0.25.1680.937" timestamp="1654275691707" />
+    <state width="1878" height="363" key="GridCell.Tab.1.left/1680.25.1920.1055/0.25.1680.937@1680.25.1920.1055" timestamp="1654310030307" />
+    <state width="1878" height="269" key="GridCell.Tab.1.left/1680.25.1920.1055/0.25.1680.940@1680.25.1920.1055" timestamp="1654314562892" />
+    <state width="1878" height="248" key="GridCell.Tab.1.left/1680.25.1920.1055/0.25.1680.942@1680.25.1920.1055" timestamp="1654181316401" />
+    <state width="1878" height="269" key="GridCell.Tab.1.right" timestamp="1654314562892">
       <screen x="1680" y="25" width="1920" height="1055" />
     </state>
-    <state width="1878" height="354" key="GridCell.Tab.1.right/1680.25.1920.1055/0.25.1680.937@1680.25.1920.1055" timestamp="1654012112615" />
-    <state width="1878" height="287" key="GridCell.Tab.1.right/1680.25.1920.1055/0.25.1680.940@1680.25.1920.1055" timestamp="1654166983867" />
-    <state width="1878" height="248" key="GridCell.Tab.1.right/1680.25.1920.1055/0.25.1680.942@1680.25.1920.1055" timestamp="1654180328296" />
+    <state width="1638" height="480" key="GridCell.Tab.1.right/0.25.1680.937@0.25.1680.937" timestamp="1654275691707" />
+    <state width="1878" height="363" key="GridCell.Tab.1.right/1680.25.1920.1055/0.25.1680.937@1680.25.1920.1055" timestamp="1654310030309" />
+    <state width="1878" height="269" key="GridCell.Tab.1.right/1680.25.1920.1055/0.25.1680.940@1680.25.1920.1055" timestamp="1654314562892" />
+    <state width="1878" height="248" key="GridCell.Tab.1.right/1680.25.1920.1055/0.25.1680.942@1680.25.1920.1055" timestamp="1654181316401" />
     <state x="2128" y="131" key="SettingsEditor" timestamp="1654009363807">
       <screen x="1680" y="25" width="1920" height="1055" />
     </state>
     <state x="2128" y="131" key="SettingsEditor/1680.25.1920.1055/0.25.1680.937@1680.25.1920.1055" timestamp="1654009363807" />
+    <state x="2305" y="259" width="670" height="676" key="search.everywhere.popup" timestamp="1654309613476">
+      <screen x="1680" y="25" width="1920" height="1055" />
+    </state>
+    <state x="2305" y="259" width="670" height="676" key="search.everywhere.popup/1680.25.1920.1055/0.25.1680.937@1680.25.1920.1055" timestamp="1654309613476" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -242,6 +258,16 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/github/algorithm/BucketSort.java</url>
           <line>65</line>
           <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/github/data_structure/HashTable.java</url>
+          <line>141</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/github/data_structure/HashTable.java</url>
+          <line>140</line>
+          <option name="timeStamp" value="11" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
