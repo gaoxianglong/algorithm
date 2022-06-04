@@ -40,8 +40,8 @@ public class InsertSort {
     Integer[] sort() {
         Objects.requireNonNull(array);
         for (var i = 0; i < array.length; i++) {
-            var temp = array[i];
             var j = i;
+            var temp = array[i];
             for (; j > 0 && array[j - 1] > temp; j--) {
                 array[j] = array[j - 1];
             }
