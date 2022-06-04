@@ -39,18 +39,17 @@ public class BinarySearch {
 
     Integer search(Integer target) {
         Objects.requireNonNull(target);
-        var begin = 0;
-        var end = array.length;
+        var b = 0;
+        var e = array.length;
         while (true) {
-            // 长度折半
-            var mid = (begin + end) >> 1;
-            System.out.printf("mid:%s\n", mid);
-            if (array[mid] == target) {
-                return mid;
-            } else if (array[mid] > target) {
-                end = --mid;
+            var i = (e + b) >> 1;
+            var m = array[i];
+            if (m == target) {
+                return i;
+            } else if (m > target) {
+                e = --i;
             } else {
-                begin = ++mid;
+                b = ++i;
             }
         }
     }
