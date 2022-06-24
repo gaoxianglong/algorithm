@@ -57,7 +57,14 @@ public class HashTable<K, V> {
      */
     static final float DEFAULT_LOAD_FACTOR = 0.75f;
     Node<K, V>[] table;
-    int size, use;
+    /**
+     * 元素数
+     */
+    int size;
+    /**
+     * 空间
+     */
+    int use;
 
     HashTable() {
         this(DEFAULT_INITIAL_CAPACITY);
@@ -102,7 +109,7 @@ public class HashTable<K, V> {
             return null;
         }
         for (n = n.next; Objects.nonNull(n); n = n.next) {
-            if (key.equals(n.key)) {
+            if (n.key.equals(key)) {
                 return n.value;
             }
         }
@@ -113,13 +120,13 @@ public class HashTable<K, V> {
         check(key);
         var index = hash(key);
         var n = table[index];
-        if (Objects.isNull(n) || Objects.isNull(n.next)) {
+        if (Objects.isNull(n) && Objects.isNull(n.next)) {
             return false;
         }
         var prev = n;
         for (n = n.next; Objects.nonNull(n); prev = n, n = n.next) {
-            if (key.equals(n.key)) {
-                prev.next = n.next;
+            if (n.key.equals(key)) {
+                prev.next = n.next;                                          
                 size--;
                 return true;
             }
@@ -143,11 +150,11 @@ public class HashTable<K, V> {
     }
 
     synchronized void resize() {
-        size = 0;
         use = 0;
-        var before = table;
+        size = 0;
+        var temp = table;
         table = new Node[table.length << 1];
-        Stream.of(before).filter(x -> Objects.nonNull(x) && Objects.nonNull(x.next)).forEach(x -> {
+        Arrays.stream(temp).filter(x -> Objects.nonNull(x) && Objects.nonNull(x.next)).forEach(x -> {
             for (x = x.next; Objects.nonNull(x); x = x.next) {
                 put(x.key, x.value);
             }

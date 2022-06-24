@@ -50,12 +50,12 @@ public class Queue<T> {
      */
     void push(T value) {
         Objects.requireNonNull(value);
-        var next = (write + 1) % array.length;
-        if (read == next) {
+        var index = (write + 1) % array.length;
+        if (read == index) {
             return;
         }
         array[write] = value;
-        write = next;
+        write = index;
     }
 
     /**
@@ -64,7 +64,10 @@ public class Queue<T> {
      * @return
      */
     T peek() {
-        return read == write ? null : (T) array[read];
+        if (read == write) {
+            return null;
+        }
+        return (T) array[read];
     }
 
     /**
@@ -73,13 +76,12 @@ public class Queue<T> {
      * @return
      */
     T poll() {
-        var n = peek();
-        if (Objects.isNull(n)) {
+        var temp = peek();
+        if (Objects.isNull(temp)) {
             return null;
         }
-        array[read] = null;
         read = (read + 1) % array.length;
-        return n;
+        return temp;
     }
 
     /**

@@ -14,6 +14,7 @@ package com.github.data_structure;/*
  * limitations under the License.
  */
 
+import org.junit.Assert;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -23,15 +24,15 @@ import java.util.Objects;
  * @date created in 2020/11/30 10:59 下午
  */
 public class RBTree<T> {
-    enum Color {
+    static enum Color {
         RED, BLACK;
     }
 
     static class Node<T> {
         int key;
         T value;
-        Color color = Color.RED;
         Node<T> parent, left, right;
+        Color color = Color.RED;
 
         Node(int key, T value) {
             this.key = key;
@@ -43,10 +44,10 @@ public class RBTree<T> {
             return "Node{" +
                     "key=" + key +
                     ", value=" + value +
-                    ", color=" + color +
                     ", parent=" + (Objects.nonNull(parent) ? parent.key : null) +
                     ", left=" + (Objects.nonNull(left) ? left.key : null) +
                     ", right=" + (Objects.nonNull(right) ? right.key : null) +
+                    ", color=" + color +
                     '}';
         }
     }
@@ -54,11 +55,12 @@ public class RBTree<T> {
     Node<T> root;
 
     void insert(int key, T value) {
+        Objects.requireNonNull(value);
         var nn = new Node(key, value);
         if (Objects.isNull(root)) {
             root = nn;
         } else {
-            insert(root, root.parent, nn);
+            insert(root, null, nn);
         }
         i_fixup(nn);
     }
@@ -83,45 +85,257 @@ public class RBTree<T> {
         }
         if (Objects.isNull(n) || n.parent.color == Color.BLACK) {
             return;
-        } else {
-            var parent = n.parent;
-            var gand = parent.parent;
-            if (gand.left == parent) {
-                var uncle = gand.right;
-                if (Objects.nonNull(uncle) && uncle.color == Color.RED) {
-                    parent.color = Color.BLACK;
-                    uncle.color = Color.BLACK;
-                    gand.color = Color.RED;
-                    i_fixup(gand);
-                } else {
-                    if (parent.left == n) {
-                        parent.color = Color.BLACK;
-                        gand.color = Color.RED;
-                        rightRotate(gand);
-                    } else {
-                        leftRotate(parent);
-                        i_fixup(parent);
-                    }
-                }
+        }
+        var parent = n.parent;
+        var gand = parent.parent;
+        if (gand.left == parent) {
+            var uncle = gand.right;
+            if (Objects.nonNull(uncle) && uncle.color == Color.RED) {
+                parent.color = Color.BLACK;
+                uncle.color = Color.BLACK;
+                gand.color = Color.RED;
+                i_fixup(gand);
             } else {
-                var uncle = gand.left;
-                if (Objects.nonNull(uncle) && uncle.color == Color.RED) {
+                if (parent.left == n) {
                     parent.color = Color.BLACK;
-                    uncle.color = Color.BLACK;
                     gand.color = Color.RED;
-                    i_fixup(gand);
+                    rightRotate(gand);
                 } else {
-                    if (parent.right == n) {
-                        parent.color = Color.BLACK;
-                        gand.color = Color.RED;
-                        leftRotate(gand);
-                    } else {
-                        rightRotate(parent);
-                        i_fixup(parent);
-                    }
+                    leftRotate(parent);
+                    i_fixup(parent);
+                }
+            }
+        } else {
+            var uncle = gand.left;
+            if (Objects.nonNull(uncle) && uncle.color == Color.RED) {
+                parent.color = Color.BLACK;
+                uncle.color = Color.BLACK;
+                gand.color = Color.RED;
+                i_fixup(gand);
+            } else {
+                if (parent.right == n) {
+                    parent.color = Color.BLACK;
+                    gand.color = Color.RED;
+                    leftRotate(gand);
+                } else {
+                    rightRotate(parent);
+                    i_fixup(parent);
                 }
             }
         }
+    }
+
+    boolean delete(int key) {
+        var n = getNode(key);
+        if (Objects.nonNull(n)) {
+            delete(n);
+            return true;
+        }
+        return false;
+    }
+
+    void delete(Node<T> n) {
+        Node<T> n1 = null, n2 = null;
+        if (Objects.nonNull(n.left) && Objects.nonNull(n.right)) {
+            var sn = getSucceedNode(n.key);
+            n.key = sn.key;
+            n.value = sn.value;
+            n.left.parent = n;
+            n.right.parent = n;
+            delete(sn);
+            return;
+        } else {
+            if (Objects.isNull(n.parent)) {
+                root = Objects.nonNull(n.left) ? n.left : n.right;
+                if (Objects.nonNull(root.parent)) {
+                    root.parent = null;
+                }
+                n1 = root;
+            } else {
+                var cn = Objects.nonNull(n.left) ? n.left : n.right;
+                if (n.parent.left == n) {
+                    n.parent.left = cn;
+                } else {
+                    n.parent.right = cn;
+                }
+                if (Objects.nonNull(cn)) {
+                    cn.parent = n.parent;
+                }
+                n1 = cn;
+                n2 = n.parent;
+            }
+        }
+        if (n.color == Color.BLACK) {
+            d_difup(n1, n2);
+        }
+    }
+
+    void d_difup(Node<T> n1, Node<T> n2) {
+        Node<T> bro = null;
+        while ((Objects.isNull(n1) || n1.color == Color.BLACK) && root != n1) {
+            if (n2.left == n1) {
+                bro = n2.right;
+                if (Objects.nonNull(bro) && bro.color == Color.RED) {
+                    n2.color = Color.RED;
+                    bro.color = Color.BLACK;
+                    leftRotate(n2);
+                    bro = n2.right;
+                }
+                if ((Objects.isNull(bro.left) || bro.left.color == Color.BLACK) &&
+                        (Objects.isNull(bro.right) || bro.right.color == Color.BLACK)) {
+                    if (n2.color == Color.RED) {
+                        n2.color = Color.BLACK;
+                        bro.color = Color.RED;
+                        break;
+                    } else {
+                        bro.color = Color.RED;
+                        n1 = n2;
+                        n2 = n1.parent;
+                    }
+                } else {
+                    if (Objects.nonNull(bro.left) && bro.left.color == Color.RED) {
+                        bro.left.color = n2.color;
+                        n2.color = Color.BLACK;
+                        rightRotate(bro);
+                        leftRotate(n2);
+                    } else if (Objects.nonNull(bro.right) && bro.right.color == Color.RED) {
+                        bro.color = n2.color;
+                        n2.color = Color.BLACK;
+                        bro.right.color = Color.BLACK;
+                        leftRotate(n2);
+                    }
+                    break;
+                }
+            } else {
+                bro = n2.left;
+                if (Objects.nonNull(bro) && bro.color == Color.RED) {
+                    n2.color = Color.RED;
+                    bro.color = Color.BLACK;
+                    rightRotate(n2);
+                    bro = n2.left;
+                }
+                if ((Objects.isNull(bro.left) || bro.left.color == Color.BLACK) &&
+                        (Objects.isNull(bro.right) || bro.right.color == Color.BLACK)) {
+                    if (n2.color == Color.RED) {
+                        n2.color = Color.BLACK;
+                        bro.color = Color.RED;
+                        break;
+                    } else {
+                        bro.color = Color.RED;
+                        n1 = n2;
+                        n2 = n1.parent;
+                    }
+                } else {
+                    if (Objects.nonNull(bro.right) && bro.right.color == Color.RED) {
+                        bro.right.color = n2.color;
+                        n2.color = Color.BLACK;
+                        leftRotate(bro);
+                        rightRotate(n2);
+                    } else if (Objects.nonNull(bro.left) && bro.left.color == Color.RED) {
+                        bro.color = n2.color;
+                        n2.color = Color.BLACK;
+                        bro.left.color = Color.BLACK;
+                        rightRotate(n2);
+                    }
+                    break;
+                }
+            }
+        }
+        if (Objects.nonNull(n1)) {
+            n1.color = Color.BLACK;
+        }
+    }
+
+    Node<T> getNode(int key) {
+        if (Objects.nonNull(root)) {
+            return key == root.key ? root : getNode(key, root);
+        }
+        return null;
+    }
+
+    Node<T> getNode(int key, Node<T> n) {
+        if (Objects.nonNull(n)) {
+            if (key == n.key) {
+                return n;
+            }
+            return getNode(key, key < n.key ? n.left : n.right);
+        }
+        return null;
+    }
+
+    Node<T> getSucceedNode(int key) {
+        var n = getNode(key);
+        if (Objects.nonNull(n)) {
+            return getSucceedNode(n.left);
+        }
+        return null;
+    }
+
+    Node<T> getSucceedNode(Node<T> n) {
+        if (Objects.nonNull(n)) {
+            var sn = getSucceedNode(n.right);
+            return Objects.nonNull(sn) ? sn : n;
+        }
+        return null;
+    }
+
+    Integer getMin() {
+        return getMin(root);
+    }
+
+    Integer getMin(Node<T> n) {
+        if (Objects.nonNull(n)) {
+            var result = getMin(n.left);
+            return Objects.nonNull(result) ? result : n.key;
+        }
+        return null;
+    }
+
+    Integer getMax() {
+        return getMax(root);
+    }
+
+    Integer getMax(Node<T> n) {
+        if (Objects.nonNull(n)) {
+            var result = getMax(n.right);
+            return Objects.nonNull(result) ? result : n.key;
+        }
+        return null;
+    }
+
+    int getSize() {
+        return getSize(root);
+    }
+
+    int getSize(Node<T> n) {
+        if (Objects.nonNull(n)) {
+            return 1 + getSize(n.left) + getSize(n.right);
+        }
+        return 0;
+    }
+
+    int getHeight() {
+        return getHeight(root);
+    }
+
+    int getHeight(Node<T> n) {
+        if (Objects.nonNull(n)) {
+            return 1 + Math.max(getHeight(n.left), getHeight(n.right));
+        }
+        return 0;
+    }
+
+    void inOrder() {
+        inOrder(root);
+    }
+
+    void inOrder(Node<T> n) {
+        if (Objects.isNull(n)) {
+            return;
+        }
+        inOrder(n.left);
+        System.out.println(n);
+        inOrder(n.right);
     }
 
     void rightRotate(Node<T> n) {
@@ -156,216 +370,9 @@ public class RBTree<T> {
         n2.parent = n1;
     }
 
-    int getSize() {
-        return getSize(root);
-    }
-
-    int getSize(Node<T> n) {
-        if (Objects.nonNull(n)) {
-            return 1 + getSize(n.left) + getSize(n.right);
-        }
-        return 0;
-    }
-
-    int getHeight() {
-        return getHeight(root);
-    }
-
-    int getHeight(Node<T> n) {
-        if (Objects.nonNull(n)) {
-            return 1 + Math.max(getHeight(n.left), getHeight(n.right));
-        }
-        return 0;
-    }
-
-    Integer getMin() {
-        return getMin(root);
-    }
-
-    Integer getMin(Node<T> n) {
-        if (Objects.nonNull(n)) {
-            var result = getMin(n.left);
-            return Objects.nonNull(result) ? result : n.key;
-        }
-        return null;
-    }
-
-    Integer getMax() {
-        return getMax(root);
-    }
-
-    Integer getMax(Node<T> n) {
-        if (Objects.nonNull(n)) {
-            var result = getMax(n.right);
-            return Objects.nonNull(result) ? result : n.key;
-        }
-        return null;
-    }
-
-    void inOrder() {
-        inOrder(root);
-    }
-
-    void inOrder(Node<T> n) {
-        if (Objects.nonNull(n)) {
-            inOrder(n.left);
-            System.out.println(n);
-            inOrder(n.right);
-        }
-    }
-
-    Node<T> getNode(int key) {
-        if (Objects.nonNull(root)) {
-            return root.key == key ? root : getNode(key, root);
-        }
-        return null;
-    }
-
-    Node<T> getNode(int key, Node<T> n) {
-        if (Objects.nonNull(key)) {
-            if (key == n.key) {
-                return n;
-            }
-            return getNode(key, key < n.key ? n.left : n.right);
-        }
-        return null;
-    }
-
-    Node<T> getSucceedNode(int key) {
-        var n = getNode(key);
-        if (Objects.nonNull(n)) {
-            return getSucceedNode(n.left);
-        }
-        return null;
-    }
-
-    Node<T> getSucceedNode(Node<T> n) {
-        if (Objects.nonNull(n)) {
-            var sn = getSucceedNode(n.right);
-            return Objects.nonNull(sn) ? sn : n;
-        }
-        return null;
-    }
-
-    boolean delete(int key) {
-        var n = getNode(key);
-        if (Objects.nonNull(n)) {
-            delete(n);
-            return true;
-        }
-        return false;
-    }
-
-    void delete(Node<T> n) {
-        Node<T> n1 = null, n2 = null;
-        if (Objects.nonNull(n.left) && Objects.nonNull(n.right)) {
-            var sn = getSucceedNode(n.key);
-            n.key = sn.key;
-            n.value = sn.value;
-            n.left.parent = n;
-            n.right.parent = n;
-            delete(sn);
-            return;
-        } else {
-            if (Objects.isNull(n.parent)) {
-                root = Objects.nonNull(n.left) ? n.left : n.right;
-                if (Objects.nonNull(root.parent)) {
-                    root.parent = null;
-                }
-                n1 = root;
-            } else {
-                var c = Objects.nonNull(n.left) ? n.left : n.right;
-                if (n.parent.left == n) {
-                    n.parent.left = c;
-                } else {
-                    n.parent.right = c;
-                }
-                if (Objects.nonNull(c)) {
-                    c.parent = n.parent;
-                }
-                n1 = c;
-                n2 = n.parent;
-            }
-        }
-        if (n.color == Color.BLACK) {
-            d_fixup(n1, n2);
-        }
-    }
-
-    void d_fixup(Node<T> n1, Node<T> n2) {
-        Node<T> bro = null;
-        while ((Objects.isNull(n1) || n1.color == Color.BLACK) && root != n1) {
-            if (n2.left == n1) {
-                bro = n2.right;
-                if (bro.color == Color.RED) {
-                    bro.color = Color.BLACK;
-                    n2.color = Color.RED;
-                    leftRotate(n2);
-                    bro = n2.right;
-                }
-                if ((Objects.isNull(bro.left) || bro.left.color == Color.BLACK) && (Objects.isNull(bro.right) || bro.right.color == Color.BLACK)) {
-                    if (n2.color == Color.RED) {
-                        n2.color = Color.BLACK;
-                        bro.color = Color.RED;
-                        break;
-                    } else {
-                        bro.color = Color.RED;
-                        n1 = n2;
-                        n2 = n1.parent;
-                    }
-                } else {
-                    if (Objects.nonNull(bro.left) && bro.left.color == Color.RED) {
-                        bro.left.color = n2.color;
-                        n2.color = Color.BLACK;
-                        rightRotate(bro);
-                        leftRotate(n2);
-                    } else if (Objects.nonNull(bro.right) && bro.right.color == Color.RED) {
-                        bro.color = n2.color;
-                        n2.color = Color.BLACK;
-                        bro.right.color = Color.BLACK;
-                    }
-                    break;
-                }
-            } else {
-                bro = n2.left;
-                if (bro.color == Color.RED) {
-                    bro.color = Color.BLACK;
-                    n2.color = Color.RED;
-                    rightRotate(n2);
-                    bro = n2.left;
-                }
-                if ((Objects.isNull(bro.left) || bro.left.color == Color.BLACK) && (Objects.isNull(bro.right) || bro.right.color == Color.BLACK)) {
-                    if (n2.color == Color.RED) {
-                        n2.color = Color.BLACK;
-                        bro.color = Color.RED;
-                        break;
-                    } else {
-                        bro.color = Color.RED;
-                        n1 = n2;
-                        n2 = n1.parent;
-                    }
-                } else {
-                    if (Objects.nonNull(bro.right) && bro.right.color == Color.RED) {
-                        bro.right.color = n2.color;
-                        n2.color = Color.BLACK;
-                        leftRotate(bro);
-                        rightRotate(n2);
-                    } else if (Objects.nonNull(bro.left) && bro.left.color == Color.RED) {
-                        bro.color = n2.color;
-                        n2.color = Color.BLACK;
-                        bro.left.color = Color.BLACK;
-                    }
-                    break;
-                }
-            }
-        }
-        if (Objects.nonNull(n1)) {
-            n1.color = Color.BLACK;
-        }
-    }
-
     void getBlackHeight() {
-        getBlackHeight(root, root.parent, 0);
+        getBlackHeight(root, null, 0);
+        System.out.println();
     }
 
     void getBlackHeight(Node<T> n1, Node<T> n2, int size) {
@@ -373,43 +380,69 @@ public class RBTree<T> {
             getBlackHeight(n1.left, n1, n1.color == Color.BLACK ? size + 1 : size);
             getBlackHeight(n1.right, n1, n1.color == Color.BLACK ? size + 1 : size);
         } else {
-            var buf = new StringBuffer();
+            var builder = new StringBuilder();
             while (Objects.nonNull(n2)) {
-                buf.append(String.format("%s(%s)->", n2.key, n2.color));
+                builder.append(String.format("%s(%s)->", n2.key, n2.color));
                 n2 = n2.parent;
             }
-            var temp = buf.toString();
-            temp = temp.substring(0, temp.length() - 2);
-            System.out.printf("%s\tsize:%s\n", temp, size);
+            var temp = builder.toString();
+            System.out.printf("%s,size:%s\n", temp.substring(0, temp.lastIndexOf("->")), size);
+        }
+    }
+
+    int getBlackSize() {
+        return getBlackSize(root);
+    }
+
+    int getBlackSize(Node<T> n) {
+        if (Objects.nonNull(n)) {
+            return (n.color == Color.BLACK ? 1 : 0) +
+                    getBlackSize(n.left) + getBlackSize(n.right);
+        }
+        return 0;
+    }
+
+    void clear() {
+        if (Objects.nonNull(root)) {
+            root = null;
         }
     }
 
     public static void main(String[] agrs) {
-        Integer[] temp = {200, 100, 300, 10, 160, 250, 350, 5, 50, 150, 170, 180, 210};
+        Integer[] temp = {200, 100, 300, 250, 400, 350};
         var tree = new RBTree<>();
         Arrays.asList(temp).forEach(x -> tree.insert(x, x));
         tree.inOrder();
-        System.out.printf("min:%s,max:%s,size:%s,height:%s\n", tree.getMin(), tree.getMax(), tree.getSize(), tree.getHeight());
-        System.out.printf("node:%s,succee:%s\n", tree.getNode(50), tree.getSucceedNode(10));
-        System.out.printf("delete:%s\n", tree.delete(180));
-        System.out.printf("delete:%s\n", tree.delete(200));
-        System.out.printf("delete:%s\n", tree.delete(160));
+        tree.getBlackHeight();
+        Assert.assertEquals(4, tree.getBlackSize());
+        Assert.assertEquals(6, tree.getSize());
+        Assert.assertEquals(100, tree.getMin().intValue());
+        Assert.assertEquals(400, tree.getMax().intValue());
+        Assert.assertEquals(4, tree.getHeight());
+        Assert.assertFalse(tree.delete(500));
+        Assert.assertTrue(tree.delete(100));
+        Assert.assertEquals(300, tree.root.key);
+        Assert.assertEquals(200, tree.getMin().intValue());
+        Assert.assertEquals(3, tree.getHeight());
+        Assert.assertTrue(tree.delete(250));
+        Assert.assertTrue(tree.delete(300));
+        Assert.assertTrue(tree.delete(200));
+        Assert.assertEquals(2, tree.getHeight());
+        Assert.assertEquals(Color.RED, tree.root.right.color);
+        Assert.assertEquals(1, tree.getBlackSize());
+
+        tree.clear();
+        Integer[] temp2 = {200, 100, 400, 250, 500};
+        Arrays.asList(temp2).forEach(x -> tree.insert(x, x));
+        Assert.assertEquals(3, tree.getBlackSize());
         tree.inOrder();
         tree.getBlackHeight();
-
-//        Integer[] temp = {200, 100, 300, 250, 400, 210};
-//        var tree = new RBTree<>();
-//        Arrays.asList(temp).forEach(x -> tree.insert(x, x));
-//        tree.delete(210);
-//        tree.delete(300);
-//        tree.inOrder();
-//        tree.getBlackHeight();
-
-//        Integer[] temp = {200, 100, 300, 250};
-//        var tree = new RBTree<>();
-//        Arrays.asList(temp).forEach(x -> tree.insert(x, x));
-//        tree.delete(100);
-//        tree.inOrder();
-//        tree.getBlackHeight();
+        Assert.assertEquals(250, tree.getSucceedNode(400).key);
+        Assert.assertTrue(tree.delete(250));
+        Assert.assertTrue(tree.delete(500));
+        Assert.assertEquals(2, tree.getHeight());
+        Assert.assertTrue(tree.delete(400));
+        tree.getBlackHeight();
+        Assert.assertEquals(1, tree.getBlackSize());
     }
 }
