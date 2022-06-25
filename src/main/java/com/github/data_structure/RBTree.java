@@ -125,6 +125,161 @@ public class RBTree<T> {
         }
     }
 
+    void rightRotate(Node<T> n) {
+        var left = n.left;
+        n.left = left.right;
+        if (Objects.nonNull(left.right)) {
+            left.right.parent = n;
+        }
+        left.right = n;
+        reset(left, n);
+    }
+
+    void leftRotate(Node<T> n) {
+        var right = n.right;
+        n.right = right.left;
+        if (Objects.nonNull(right.left)) {
+            right.left.parent = n;
+        }
+        right.left = n;
+        reset(right, n);
+    }
+
+    void reset(Node<T> n1, Node<T> n2) {
+        if (root == n2) {
+            root = n1;
+        } else if (n2.parent.left == n2) {
+            n2.parent.left = n1;
+        } else {
+            n2.parent.right = n1;
+        }
+        n1.parent = n2.parent;
+        n2.parent = n1;
+    }
+
+    void inOrder() {
+        inOrder(root);
+    }
+
+    void inOrder(Node<T> n) {
+        if (Objects.isNull(n)) {
+            return;
+        }
+        inOrder(n.left);
+        System.out.println(n);
+        inOrder(n.right);
+    }
+
+    Integer getMin() {
+        return getMin(root);
+    }
+
+    Integer getMin(Node<T> n) {
+        if (Objects.nonNull(n)) {
+            var result = getMin(n.left);
+            return Objects.nonNull(result) ? result : n.key;
+        }
+        return null;
+    }
+
+    Integer getMax() {
+        return getMax(root);
+    }
+
+    Integer getMax(Node<T> n) {
+        if (Objects.nonNull(n)) {
+            var result = getMax(n.right);
+            return Objects.nonNull(result) ? result : n.key;
+        }
+        return null;
+    }
+
+    int getSize() {
+        return getSize(root);
+    }
+
+    int getSize(Node<T> n) {
+        if (Objects.nonNull(n)) {
+            return 1 + getSize(n.left) + getSize(n.right);
+        }
+        return 0;
+    }
+
+    int getHeight() {
+        return getHeight(root);
+    }
+
+    int getHeight(Node<T> n) {
+        if (Objects.nonNull(n)) {
+            return 1 + Math.max(getHeight(n.left), getHeight(n.right));
+        }
+        return 0;
+    }
+
+    void getBlackHeight() {
+        getBlackHeight(root, null, 0);
+        System.out.println();
+    }
+
+    void getBlackHeight(Node<T> n1, Node<T> n2, int size) {
+        if (Objects.nonNull(n1)) {
+            getBlackHeight(n1.left, n1, n1.color == Color.BLACK ? size + 1 : size);
+            getBlackHeight(n1.right, n1, n1.color == Color.BLACK ? size + 1 : size);
+        } else {
+            var builder = new StringBuffer();
+            while (Objects.nonNull(n2)) {
+                builder.append(String.format("%s(%s)->", n2.key, n2.color));
+                n2 = n2.parent;
+            }
+            var temp = builder.toString();
+            System.out.printf("%s,size:%s\n", temp.substring(0, temp.lastIndexOf("->")), size);
+        }
+    }
+
+    int getBlackSize() {
+        return getBlackSize(root);
+    }
+
+    int getBlackSize(Node<T> n) {
+        if (Objects.nonNull(n)) {
+            return (n.color == Color.BLACK ? 1 : 0) + getBlackSize(n.left) + getBlackSize(n.right);
+        }
+        return 0;
+    }
+
+    Node<T> getNode(int key) {
+        if (Objects.nonNull(root)) {
+            return key == root.key ? root : getNode(key, root);
+        }
+        return null;
+    }
+
+    Node<T> getNode(int key, Node<T> n) {
+        if (Objects.nonNull(n)) {
+            if (key == n.key) {
+                return n;
+            }
+            return getNode(key, key < n.key ? n.left : n.right);
+        }
+        return null;
+    }
+
+    Node<T> getSucceedNode(int key) {
+        var n = getNode(key);
+        if (Objects.nonNull(n)) {
+            return getSucceedNode(n.left);
+        }
+        return null;
+    }
+
+    Node<T> getSucceedNode(Node<T> n) {
+        if (Objects.nonNull(n)) {
+            var sn = getSucceedNode(n.right);
+            return Objects.nonNull(sn) ? sn : n;
+        }
+        return null;
+    }
+
     boolean delete(int key) {
         var n = getNode(key);
         if (Objects.nonNull(n)) {
@@ -166,11 +321,11 @@ public class RBTree<T> {
             }
         }
         if (n.color == Color.BLACK) {
-            d_difup(n1, n2);
+            d_fixup(n1, n2);
         }
     }
 
-    void d_difup(Node<T> n1, Node<T> n2) {
+    void d_fixup(Node<T> n1, Node<T> n2) {
         Node<T> bro = null;
         while ((Objects.isNull(n1) || n1.color == Color.BLACK) && root != n1) {
             if (n2.left == n1) {
@@ -246,162 +401,6 @@ public class RBTree<T> {
         }
     }
 
-    Node<T> getNode(int key) {
-        if (Objects.nonNull(root)) {
-            return key == root.key ? root : getNode(key, root);
-        }
-        return null;
-    }
-
-    Node<T> getNode(int key, Node<T> n) {
-        if (Objects.nonNull(n)) {
-            if (key == n.key) {
-                return n;
-            }
-            return getNode(key, key < n.key ? n.left : n.right);
-        }
-        return null;
-    }
-
-    Node<T> getSucceedNode(int key) {
-        var n = getNode(key);
-        if (Objects.nonNull(n)) {
-            return getSucceedNode(n.left);
-        }
-        return null;
-    }
-
-    Node<T> getSucceedNode(Node<T> n) {
-        if (Objects.nonNull(n)) {
-            var sn = getSucceedNode(n.right);
-            return Objects.nonNull(sn) ? sn : n;
-        }
-        return null;
-    }
-
-    Integer getMin() {
-        return getMin(root);
-    }
-
-    Integer getMin(Node<T> n) {
-        if (Objects.nonNull(n)) {
-            var result = getMin(n.left);
-            return Objects.nonNull(result) ? result : n.key;
-        }
-        return null;
-    }
-
-    Integer getMax() {
-        return getMax(root);
-    }
-
-    Integer getMax(Node<T> n) {
-        if (Objects.nonNull(n)) {
-            var result = getMax(n.right);
-            return Objects.nonNull(result) ? result : n.key;
-        }
-        return null;
-    }
-
-    int getSize() {
-        return getSize(root);
-    }
-
-    int getSize(Node<T> n) {
-        if (Objects.nonNull(n)) {
-            return 1 + getSize(n.left) + getSize(n.right);
-        }
-        return 0;
-    }
-
-    int getHeight() {
-        return getHeight(root);
-    }
-
-    int getHeight(Node<T> n) {
-        if (Objects.nonNull(n)) {
-            return 1 + Math.max(getHeight(n.left), getHeight(n.right));
-        }
-        return 0;
-    }
-
-    void inOrder() {
-        inOrder(root);
-    }
-
-    void inOrder(Node<T> n) {
-        if (Objects.isNull(n)) {
-            return;
-        }
-        inOrder(n.left);
-        System.out.println(n);
-        inOrder(n.right);
-    }
-
-    void rightRotate(Node<T> n) {
-        var left = n.left;
-        n.left = left.right;
-        if (Objects.nonNull(left.right)) {
-            left.right.parent = n;
-        }
-        left.right = n;
-        reset(left, n);
-    }
-
-    void leftRotate(Node<T> n) {
-        var right = n.right;
-        n.right = right.left;
-        if (Objects.nonNull(right.left)) {
-            right.left.parent = n;
-        }
-        right.left = n;
-        reset(right, n);
-    }
-
-    void reset(Node<T> n1, Node<T> n2) {
-        if (root == n2) {
-            root = n1;
-        } else if (n2.parent.left == n2) {
-            n2.parent.left = n1;
-        } else {
-            n2.parent.right = n1;
-        }
-        n1.parent = n2.parent;
-        n2.parent = n1;
-    }
-
-    void getBlackHeight() {
-        getBlackHeight(root, null, 0);
-        System.out.println();
-    }
-
-    void getBlackHeight(Node<T> n1, Node<T> n2, int size) {
-        if (Objects.nonNull(n1)) {
-            getBlackHeight(n1.left, n1, n1.color == Color.BLACK ? size + 1 : size);
-            getBlackHeight(n1.right, n1, n1.color == Color.BLACK ? size + 1 : size);
-        } else {
-            var builder = new StringBuilder();
-            while (Objects.nonNull(n2)) {
-                builder.append(String.format("%s(%s)->", n2.key, n2.color));
-                n2 = n2.parent;
-            }
-            var temp = builder.toString();
-            System.out.printf("%s,size:%s\n", temp.substring(0, temp.lastIndexOf("->")), size);
-        }
-    }
-
-    int getBlackSize() {
-        return getBlackSize(root);
-    }
-
-    int getBlackSize(Node<T> n) {
-        if (Objects.nonNull(n)) {
-            return (n.color == Color.BLACK ? 1 : 0) +
-                    getBlackSize(n.left) + getBlackSize(n.right);
-        }
-        return 0;
-    }
-
     void clear() {
         if (Objects.nonNull(root)) {
             root = null;
@@ -440,9 +439,12 @@ public class RBTree<T> {
         Assert.assertEquals(250, tree.getSucceedNode(400).key);
         Assert.assertTrue(tree.delete(250));
         Assert.assertTrue(tree.delete(500));
+        tree.inOrder();
         Assert.assertEquals(2, tree.getHeight());
         Assert.assertTrue(tree.delete(400));
-        tree.getBlackHeight();
+        Assert.assertEquals(2, tree.getSize());
         Assert.assertEquals(1, tree.getBlackSize());
+        tree.inOrder();
+        tree.getBlackHeight();
     }
 }
