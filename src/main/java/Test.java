@@ -14,21 +14,51 @@
  * limitations under the License.
  */
 
+import org.openjdk.jol.info.ClassLayout;
+
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author gao_xianglong@sina.com
  * @version 0.1-SNAPSHOT
  * @date created in 2022/6/24 15:55
  */
 public class Test {
-    static volatile Object obj;
+    public static void main(String[] args) {
+        Test test = new Test();
+//        try {
+//            new Test().run();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+        test.test();
+    }
 
-    static void test() {
-        for (int i = 0; i < 1000; i++) {
-            obj = new Object();
+    void test() {
+        synchronized (this) {
+            System.out.println(ClassLayout.parseInstance(this).toPrintable());
         }
     }
 
-    public static void main(String[] args) {
-        Test.test();
-    }
+//    void run() throws InterruptedException {
+//        //主线程访问，偏向锁设定
+//        printLockName();
+//        printLockName();
+//        new Thread(() -> printLockName()).start();//异步线程访问，膨胀为轻量级锁
+//        TimeUnit.SECONDS.sleep(1);
+//        //主线程和异步线程竞争，锁膨胀为重量级锁
+//        new Thread(() -> printLockName()).start();
+//        printLockName();
+//        TimeUnit.SECONDS.sleep(1);
+//        synchronized (this){
+//            System.out.printf("tid:%s\t%s\n", Thread.currentThread().getName(),
+//                    ClassLayout.parseInstance(this).toPrintable());
+//        }
+//    }
+//
+//    synchronized void printLockName() {
+//        System.out.printf("tid:%s\t%s\n", Thread.currentThread().getName(),
+//                ClassLayout.parseInstance(this).toPrintable());
+//    }
 }

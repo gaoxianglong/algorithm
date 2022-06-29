@@ -15,6 +15,7 @@ package com.github.data_structure;/*
  */
 
 import org.junit.Assert;
+
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -31,8 +32,8 @@ public class RBTree<T> {
     static class Node<T> {
         int key;
         T value;
-        Node<T> parent, left, right;
         Color color = Color.RED;
+        Node<T> parent, left, right;
 
         Node(int key, T value) {
             this.key = key;
@@ -44,10 +45,10 @@ public class RBTree<T> {
             return "Node{" +
                     "key=" + key +
                     ", value=" + value +
+                    ", color=" + color +
                     ", parent=" + (Objects.nonNull(parent) ? parent.key : null) +
                     ", left=" + (Objects.nonNull(left) ? left.key : null) +
                     ", right=" + (Objects.nonNull(right) ? right.key : null) +
-                    ", color=" + color +
                     '}';
         }
     }
@@ -97,8 +98,8 @@ public class RBTree<T> {
                 i_fixup(gand);
             } else {
                 if (parent.left == n) {
-                    parent.color = Color.BLACK;
                     gand.color = Color.RED;
+                    parent.color = Color.BLACK;
                     rightRotate(gand);
                 } else {
                     leftRotate(parent);
@@ -114,8 +115,8 @@ public class RBTree<T> {
                 i_fixup(gand);
             } else {
                 if (parent.right == n) {
-                    parent.color = Color.BLACK;
                     gand.color = Color.RED;
+                    parent.color = Color.BLACK;
                     leftRotate(gand);
                 } else {
                     rightRotate(parent);
@@ -155,19 +156,6 @@ public class RBTree<T> {
         }
         n1.parent = n2.parent;
         n2.parent = n1;
-    }
-
-    void inOrder() {
-        inOrder(root);
-    }
-
-    void inOrder(Node<T> n) {
-        if (Objects.isNull(n)) {
-            return;
-        }
-        inOrder(n.left);
-        System.out.println(n);
-        inOrder(n.right);
     }
 
     Integer getMin() {
@@ -216,26 +204,6 @@ public class RBTree<T> {
         return 0;
     }
 
-    void getBlackHeight() {
-        getBlackHeight(root, null, 0);
-        System.out.println();
-    }
-
-    void getBlackHeight(Node<T> n1, Node<T> n2, int size) {
-        if (Objects.nonNull(n1)) {
-            getBlackHeight(n1.left, n1, n1.color == Color.BLACK ? size + 1 : size);
-            getBlackHeight(n1.right, n1, n1.color == Color.BLACK ? size + 1 : size);
-        } else {
-            var builder = new StringBuffer();
-            while (Objects.nonNull(n2)) {
-                builder.append(String.format("%s(%s)->", n2.key, n2.color));
-                n2 = n2.parent;
-            }
-            var temp = builder.toString();
-            System.out.printf("%s,size:%s\n", temp.substring(0, temp.lastIndexOf("->")), size);
-        }
-    }
-
     int getBlackSize() {
         return getBlackSize(root);
     }
@@ -245,6 +213,45 @@ public class RBTree<T> {
             return (n.color == Color.BLACK ? 1 : 0) + getBlackSize(n.left) + getBlackSize(n.right);
         }
         return 0;
+    }
+
+    void inOrder() {
+        inOrder(root);
+        System.out.println();
+    }
+
+    void inOrder(Node<T> n) {
+        if (Objects.isNull(n)) {
+            return;
+        }
+        inOrder(n.left);
+        System.out.println(n);
+        inOrder(n.right);
+    }
+
+    void getBlackHeight() {
+        getBlackHeight(root, null, 0);
+    }
+
+    void getBlackHeight(Node<T> n1, Node<T> n2, int size) {
+        if (Objects.nonNull(n1)) {
+            getBlackHeight(n1.left, n1, n1.color == Color.BLACK ? size + 1 : size);
+            getBlackHeight(n1.right, n1, n1.color == Color.BLACK ? size + 1 : size);
+        } else {
+            var builder = new StringBuilder();
+            while (Objects.nonNull(n2)) {
+                builder.append(String.format("%s(%s)->", n2.key, n2.color));
+                n2 = n2.parent;
+            }
+            var temp = builder.toString();
+            System.out.printf("%s,size:%s\n", temp.substring(0, temp.lastIndexOf("->")), size);
+        }
+    }
+
+    void clear() {
+        if (Objects.nonNull(root)) {
+            root = null;
+        }
     }
 
     Node<T> getNode(int key) {
@@ -398,12 +405,6 @@ public class RBTree<T> {
         }
         if (Objects.nonNull(n1)) {
             n1.color = Color.BLACK;
-        }
-    }
-
-    void clear() {
-        if (Objects.nonNull(root)) {
-            root = null;
         }
     }
 
