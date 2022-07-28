@@ -16,8 +16,10 @@ package com.github.data_structure;/*
 
 import org.junit.Assert;
 
+import java.io.ObjectStreamException;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  * @author gao_xianglong@sina.com
@@ -32,8 +34,8 @@ public class RBTree<T> {
     static class Node<T> {
         int key;
         T value;
-        Color color = Color.RED;
         Node<T> parent, left, right;
+        Color color = Color.RED;
 
         Node(int key, T value) {
             this.key = key;
@@ -45,10 +47,10 @@ public class RBTree<T> {
             return "Node{" +
                     "key=" + key +
                     ", value=" + value +
-                    ", color=" + color +
                     ", parent=" + (Objects.nonNull(parent) ? parent.key : null) +
                     ", left=" + (Objects.nonNull(left) ? left.key : null) +
                     ", right=" + (Objects.nonNull(right) ? right.key : null) +
+                    ", color=" + color +
                     '}';
         }
     }
@@ -56,14 +58,13 @@ public class RBTree<T> {
     Node<T> root;
 
     void insert(int key, T value) {
-        Objects.requireNonNull(value);
-        var nn = new Node(key, value);
+        var n = new Node<T>(key, value);
         if (Objects.isNull(root)) {
-            root = nn;
+            root = n;
         } else {
-            insert(root, null, nn);
+            insert(root, null, n);
         }
-        i_fixup(nn);
+        i_fixup(n);
     }
 
     void insert(Node<T> n1, Node<T> n2, Node<T> n3) {
@@ -92,9 +93,9 @@ public class RBTree<T> {
         if (gand.left == parent) {
             var uncle = gand.right;
             if (Objects.nonNull(uncle) && uncle.color == Color.RED) {
+                gand.color = Color.RED;
                 parent.color = Color.BLACK;
                 uncle.color = Color.BLACK;
-                gand.color = Color.RED;
                 i_fixup(gand);
             } else {
                 if (parent.left == n) {
@@ -109,9 +110,9 @@ public class RBTree<T> {
         } else {
             var uncle = gand.left;
             if (Objects.nonNull(uncle) && uncle.color == Color.RED) {
+                gand.color = Color.RED;
                 parent.color = Color.BLACK;
                 uncle.color = Color.BLACK;
-                gand.color = Color.RED;
                 i_fixup(gand);
             } else {
                 if (parent.right == n) {
@@ -164,8 +165,8 @@ public class RBTree<T> {
 
     Integer getMin(Node<T> n) {
         if (Objects.nonNull(n)) {
-            var result = getMin(n.left);
-            return Objects.nonNull(result) ? result : n.key;
+            var rlt = getMin(n.left);
+            return Objects.nonNull(rlt) ? rlt : n.key;
         }
         return null;
     }
@@ -176,8 +177,8 @@ public class RBTree<T> {
 
     Integer getMax(Node<T> n) {
         if (Objects.nonNull(n)) {
-            var result = getMax(n.right);
-            return Objects.nonNull(result) ? result : n.key;
+            var rlt = getMax(n.right);
+            return Objects.nonNull(rlt) ? rlt : n.key;
         }
         return null;
     }
@@ -193,17 +194,6 @@ public class RBTree<T> {
         return 0;
     }
 
-    int getHeight() {
-        return getHeight(root);
-    }
-
-    int getHeight(Node<T> n) {
-        if (Objects.nonNull(n)) {
-            return 1 + Math.max(getHeight(n.left), getHeight(n.right));
-        }
-        return 0;
-    }
-
     int getBlackSize() {
         return getBlackSize(root);
     }
@@ -215,18 +205,15 @@ public class RBTree<T> {
         return 0;
     }
 
-    void inOrder() {
-        inOrder(root);
-        System.out.println();
+    int getHeight() {
+        return getHeight(root);
     }
 
-    void inOrder(Node<T> n) {
-        if (Objects.isNull(n)) {
-            return;
+    int getHeight(Node<T> n) {
+        if (Objects.nonNull(n)) {
+            return 1 + Math.max(getHeight(n.left), getHeight(n.right));
         }
-        inOrder(n.left);
-        System.out.println(n);
-        inOrder(n.right);
+        return 0;
     }
 
     void getBlackHeight() {
@@ -248,10 +235,18 @@ public class RBTree<T> {
         }
     }
 
-    void clear() {
-        if (Objects.nonNull(root)) {
-            root = null;
+    void inOrder() {
+        inOrder(root);
+        System.out.println();
+    }
+
+    void inOrder(Node<T> n) {
+        if (Objects.isNull(n)) {
+            return;
         }
+        inOrder(n.left);
+        System.out.println(n);
+        inOrder(n.right);
     }
 
     Node<T> getNode(int key) {
@@ -360,7 +355,7 @@ public class RBTree<T> {
                         n2.color = Color.BLACK;
                         rightRotate(bro);
                         leftRotate(n2);
-                    } else if (Objects.nonNull(bro.right) && bro.right.color == Color.RED) {
+                    } else {
                         bro.color = n2.color;
                         n2.color = Color.BLACK;
                         bro.right.color = Color.BLACK;
@@ -393,7 +388,7 @@ public class RBTree<T> {
                         n2.color = Color.BLACK;
                         leftRotate(bro);
                         rightRotate(n2);
-                    } else if (Objects.nonNull(bro.left) && bro.left.color == Color.RED) {
+                    } else {
                         bro.color = n2.color;
                         n2.color = Color.BLACK;
                         bro.left.color = Color.BLACK;
@@ -405,6 +400,12 @@ public class RBTree<T> {
         }
         if (Objects.nonNull(n1)) {
             n1.color = Color.BLACK;
+        }
+    }
+
+    void clear() {
+        if (Objects.nonNull(root)) {
+            root = null;
         }
     }
 
