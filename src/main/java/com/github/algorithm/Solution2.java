@@ -285,6 +285,7 @@ public class Solution2 {
     }
 
     public static void main(String[] args) {
+        System.out.println("-----");
         //System.out.println(isValid("){"));
 //        System.out.println(removeNthFromEnd(new ListNode(1, new ListNode(2)), 1));
         // 5\4\3\2\1\0
