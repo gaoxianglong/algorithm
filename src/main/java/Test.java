@@ -26,13 +26,21 @@ import java.util.concurrent.TimeUnit;
  */
 public class Test {
     public static void main(String[] args) {
-        Test test = new Test();
-//        try {
-//            new Test().run();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-        test.test();
+//        Test test = new Test();
+////        try {
+////            new Test().run();
+////        } catch (InterruptedException e) {
+////            e.printStackTrace();
+////        }
+//        test.test();
+
+        System.out.println(0x1f);
+        System.out.println(Integer.toBinaryString(31));
+        System.out.println(Integer.toBinaryString(0b10000000 | 0b00000010));
+        System.out.println(Integer.toBinaryString((0b10000000 | 0b00000010) & 0b00011111));
+        byte temp = (byte) 0x80;
+        System.out.println(Integer.toBinaryString(temp));
+        System.out.println(Integer.toBinaryString((0b10000000 | 0b00000010) & 0b10000000));
     }
 
     void test() {

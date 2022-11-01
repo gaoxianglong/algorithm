@@ -16,9 +16,9 @@ package com.github.data_structure;/*
 
 import org.junit.Assert;
 
+import javax.swing.*;
 import java.io.ObjectStreamException;
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
@@ -217,27 +217,29 @@ public class RBTree<T> {
     }
 
     void getBlackHeight() {
-        getBlackHeight(root, null, 0);
+        var set = new HashSet<String>();
+        getBlackHeight(root, null, "", 0, set);
+        for (var s : set) {
+            System.out.println(s);
+        }
+        System.out.println();
     }
 
-    void getBlackHeight(Node<T> n1, Node<T> n2, int size) {
+    void getBlackHeight(Node<T> n1, Node<T> n2, String path, int size, Set<String> set) {
         if (Objects.nonNull(n1)) {
-            getBlackHeight(n1.left, n1, n1.color == Color.BLACK ? size + 1 : size);
-            getBlackHeight(n1.right, n1, n1.color == Color.BLACK ? size + 1 : size);
+            var temp = String.format("%s%s(%s)->", path, n1.key, n1.color);
+            getBlackHeight(n1.left, n1, temp, n1.color == Color.BLACK ? 1 + size : size, set);
+            getBlackHeight(n1.right, n1, temp, n1.color == Color.BLACK ? 1 + size : size, set);
         } else {
-            var builder = new StringBuilder();
-            while (Objects.nonNull(n2)) {
-                builder.append(String.format("%s(%s)->", n2.key, n2.color));
-                n2 = n2.parent;
+            if (Objects.isNull(n2.left) && Objects.isNull(n2.right)) {
+                path = path.substring(0, path.lastIndexOf("->"));
+                set.add(String.format("%s,size:%s", path, size));
             }
-            var temp = builder.toString();
-            System.out.printf("%s,size:%s\n", temp.substring(0, temp.lastIndexOf("->")), size);
         }
     }
 
     void inOrder() {
         inOrder(root);
-        System.out.println();
     }
 
     void inOrder(Node<T> n) {
@@ -403,10 +405,32 @@ public class RBTree<T> {
         }
     }
 
-    void clear() {
-        if (Objects.nonNull(root)) {
-            root = null;
+    boolean isValidBST() {
+        var list = new ArrayList<Integer>();
+        inOrder(root, list);
+        int i = 0, j = 1, n = list.size();
+        for (; j < n; i++, j++) {
+            if (list.get(i) >= list.get(j)) {
+                return false;
+            }
         }
+        return true;
+    }
+
+    void inOrder(Node<T> n, List<Integer> list) {
+        if (Objects.isNull(n)) {
+            return;
+        }
+        inOrder(n.left, list);
+        list.add(n.key);
+        inOrder(n.right, list);
+    }
+
+    void clear() {
+        if (Objects.isNull(root)) {
+            return;
+        }
+        root = null;
     }
 
     public static void main(String[] agrs) {
@@ -431,6 +455,7 @@ public class RBTree<T> {
         Assert.assertEquals(2, tree.getHeight());
         Assert.assertEquals(Color.RED, tree.root.right.color);
         Assert.assertEquals(1, tree.getBlackSize());
+        Assert.assertEquals(true, tree.isValidBST());
 
         tree.clear();
         Integer[] temp2 = {200, 100, 400, 250, 500};
@@ -448,5 +473,6 @@ public class RBTree<T> {
         Assert.assertEquals(1, tree.getBlackSize());
         tree.inOrder();
         tree.getBlackHeight();
+        Assert.assertEquals(true, tree.isValidBST());
     }
 }
