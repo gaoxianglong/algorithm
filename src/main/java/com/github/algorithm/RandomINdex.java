@@ -5,11 +5,15 @@ import java.util.Collections;
 import java.util.List;
 
 public class RandomINdex {
-    static int totle = 147;
+    static int totle = 163;
 
     public static void main(String[] args) {
-        var list = new ArrayList<Integer>();
-        dfs(30, list);
+        List<Integer> list = null;
+        // 预热
+        for (var i = 0; i < 100; i++) {
+            list = new ArrayList<>();
+            dfs(30, list);
+        }
         Collections.sort(list);
         System.out.println(list);
     }
@@ -19,7 +23,7 @@ public class RandomINdex {
             return;
         }
         var temp = ((int) (Math.random() * totle)) + 1;
-        if (!(temp >= 1 && temp <= 147)) {
+        if (!(temp >= 50 && temp <= totle)) {
             dfs(n, list);
         } else if (list.contains(temp)) {
             dfs(n, list);

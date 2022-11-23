@@ -46,7 +46,6 @@ public class Solution {
      * @return
      */
     public String firstPalindrome(String[] words) {
-        var rlt = "";
         for (var word : words) {
             int l = 0, r = word.length() - 1;
             while (l < r) {
@@ -60,7 +59,7 @@ public class Solution {
                 return word;
             }
         }
-        return rlt;
+        return "";
     }
 
     /**
@@ -72,7 +71,7 @@ public class Solution {
     public int minCostToMoveChips(int[] position) {
         int odd = 0, even = 0;
         for (var p : position) {
-            if ((p & 1) == 0) {
+            if ((p & 1) == 1) {
                 odd++;
                 continue;
             }
@@ -92,7 +91,7 @@ public class Solution {
         var map = new ConcurrentHashMap<Integer, Integer>();
         for (var i = 0; i < nums.length; i++) {
             if (map.containsKey(target - nums[i])) {
-                return new int[]{i, map.get(target - nums[i])};
+                return new int[]{map.get(target - nums[i]), i};
             }
             map.put(nums[i], i);
         }
@@ -132,6 +131,9 @@ public class Solution {
      */
     public List<List<Integer>> threeSum(int[] nums) {
         var rlt = new ArrayList<List<Integer>>();
+        if (Objects.isNull(nums) || nums.length < 1) {
+            return rlt;
+        }
         Arrays.sort(nums);
         var n = nums.length;
         for (var i = 0; i < n; i++) {
@@ -153,7 +155,7 @@ public class Solution {
                 var t2 = nums[j];
                 var t3 = nums[k];
                 if (t1 + t2 + t3 == 0) {
-                    rlt.add(new ArrayList<>() {{
+                    rlt.add(new ArrayList<Integer>() {{
                         add(t1);
                         add(t2);
                         add(t3);
@@ -216,18 +218,17 @@ public class Solution {
      * @return
      */
     public int lengthOfLongestSubstring(String s) {
-        int rlt = 0, n = s.length();
+        int max = 0, n = s.length();
         for (var i = 0; i < n; i++) {
             var set = new HashSet<Character>();
-            set.add(s.charAt(i));
-            for (var j = i + 1; j < n; j++) {
+            for (var j = i; j < n; j++) {
                 if (!set.add(s.charAt(j))) {
                     break;
                 }
             }
-            rlt = Math.max(rlt, set.size());
+            max = Math.max(max, set.size());
         }
-        return rlt;
+        return max;
     }
 
     /**
@@ -237,12 +238,12 @@ public class Solution {
      * @return
      */
     public String longestPalindrome(String s) {
-        int max = 0, l = 0, r = 0;
-        for (var i = 0; i < s.length(); i++) {
+        int n = s.length(), max = 0, l = 0, r = 0;
+        for (var i = 0; i < n; i++) {
             var t1 = expandAroundCenter(s, i, i);
             var t2 = expandAroundCenter(s, i, i + 1);
             var t3 = t1[2] > t2[2] ? t1 : t2;
-            if (t3[2] > max) {
+            if (max < t3[2]) {
                 max = t3[2];
                 l = t3[0];
                 r = t3[1];
@@ -278,7 +279,7 @@ public class Solution {
             temp = temp * 10 + x % 10;
             x /= 10;
         }
-        return temp == x || x == temp / 10;
+        return x == temp || x == temp / 10;
     }
 
     /**
@@ -289,18 +290,18 @@ public class Solution {
      * @return
      */
     public ListNode removeNthFromEnd(ListNode head, int n) {
-        ListNode t1 = new ListNode(0, head), t2 = t1;
+        ListNode l1 = new ListNode(0, head), l2 = l1;
         var stack = new LinkedList<ListNode>();
-        while (Objects.nonNull(t2)) {
-            stack.push(t2);
-            t2 = t2.next;
+        while (Objects.nonNull(l2)) {
+            stack.push(l2);
+            l2 = l2.next;
         }
         for (var i = 0; i < n; i++) {
             stack.pop();
         }
         var prev = stack.pop();
         prev.next = prev.next.next;
-        return t1.next;
+        return l1.next;
     }
 
     /**
@@ -363,8 +364,8 @@ public class Solution {
      * @return
      */
     public int removeElement(int[] nums, int val) {
-        int i = 0, j = 0;
-        for (; j < nums.length; j++) {
+        int i = 0, j = 0, n = nums.length;
+        for (; j < n; j++) {
             if (nums[j] != val) {
                 nums[i++] = nums[j];
             }
@@ -395,7 +396,7 @@ public class Solution {
     }
 
     /**
-     * 15、划分数组使最大差为 K
+     * 15、划分数组使最大差为K
      *
      * @param nums
      * @param k
@@ -406,11 +407,11 @@ public class Solution {
             return 0;
         }
         Arrays.sort(nums);
-        int rlt = 1, temp = nums[0];
-        for (var i = 1; i < nums.length; i++) {
-            if (nums[i] - temp > k) {
+        int i = 0, j = 1, n = nums.length, rlt = 1;
+        for (; j < n; j++) {
+            if (nums[j] - nums[i] > k) {
                 rlt++;
-                temp = nums[i];
+                i = j;
             }
         }
         return rlt;
@@ -423,13 +424,13 @@ public class Solution {
      * @return
      */
     public int maxAreaOfIsland(int[][] grid) {
-        var rlt = 0;
-        for (var i = 0; i < grid.length; i++) {
-            for (var j = 0; j < grid[i].length; j++) {
-                rlt = Math.max(dfs(grid, i, j), rlt);
+        int max = 0, m = grid.length, n = grid[0].length;
+        for (var i = 0; i < m; i++) {
+            for (var j = 0; j < n; j++) {
+                max = Math.max(dfs(grid, i, j), max);
             }
         }
-        return rlt;
+        return max;
     }
 
     public int dfs(int[][] grid, int i, int j) {
@@ -457,11 +458,13 @@ public class Solution {
     public int countConsistentStrings(String allowed, String[] words) {
         var rlt = 0;
         for (var word : words) {
-            var i = 0;
-            for (; i < word.length(); i++) {
-                if (allowed.indexOf(word.charAt(i)) == -1) {
-                    break;
+            int i = 0;
+            while (i < word.length()) {
+                if (allowed.indexOf(word.charAt(i)) != -1) {
+                    i++;
+                    continue;
                 }
+                break;
             }
             if (i >= word.length()) {
                 rlt++;
@@ -490,8 +493,8 @@ public class Solution {
         public void check(Transaction transaction) {
             var dt = Math.abs(transaction.time - this.time);
             if (transaction.name.equals(this.name) && !transaction.city.equals(this.city) && dt <= 60) {
-                this.valid = true;
                 transaction.valid = true;
+                this.valid = true;
             }
         }
     }
@@ -533,18 +536,18 @@ public class Solution {
      * @return
      */
     public int longestSubarray(int[] nums) {
-        int rlt = 0, count = 0, prev = 0;
+        int max = 0, count = 0, prev = 0;
         for (var n : nums) {
             if ((n & 1) == 1) {
                 count++;
                 prev++;
-                rlt = Math.max(count, rlt);
             } else {
                 count = prev;
                 prev = 0;
             }
+            max = Math.max(max, count);
         }
-        return rlt == nums.length ? --rlt : rlt;
+        return max >= nums.length ? --max : max;
     }
 
     /**
@@ -554,17 +557,17 @@ public class Solution {
      * @return
      */
     public int maxArea(int[] height) {
-        int l = 0, r = height.length - 1, rlt = 0;
+        int max = 0, l = 0, r = height.length - 1;
         while (l < r) {
             if (height[l] < height[r]) {
-                rlt = Math.max(rlt, (r - l) * height[l]);
+                max = Math.max(max, (r - l) * height[l]);
                 l++;
                 continue;
             }
-            rlt = Math.max(rlt, (r - l) * height[r]);
+            max = Math.max(max, (r - l) * height[r]);
             r--;
         }
-        return rlt;
+        return max;
     }
 
     /**
@@ -628,8 +631,12 @@ public class Solution {
      * @return
      */
     public int threeSumClosest(int[] nums, int target) {
+        var rlt = 0;
+        if (Objects.isNull(nums) || nums.length < 1) {
+            return rlt;
+        }
         Arrays.sort(nums);
-        int n = nums.length, rlt = 0, min = Integer.MAX_VALUE;
+        int n = nums.length, min = Integer.MAX_VALUE;
         l1:
         for (var i = 0; i < n; i++) {
             if (i > 0 && nums[i] == nums[i - 1]) {
@@ -642,15 +649,15 @@ public class Solution {
                     rlt = sum;
                     break l1;
                 }
-                var dv = Math.abs(sum - target);
+                var dv = Math.abs(target - sum);
                 if (min > dv) {
                     min = dv;
                     rlt = sum;
                 }
-                if (sum > target) {
-                    k--;
-                } else {
+                if (sum < target) {
                     j++;
+                } else {
+                    k--;
                 }
             }
         }
@@ -719,12 +726,12 @@ public class Solution {
      * @return
      */
     public int jump(int[] nums) {
-        int rlt = 0, max = 0, end = 0;
-        for (var i = 0; i < nums.length - 1; i++) {
+        int rlt = 0, max = 0, end = 0, n = nums.length;
+        for (var i = 0; i < n - 1; i++) {
             max = Math.max(max, i + nums[i]);
-            if (end == i) {
-                rlt++;
+            if (i == end) {
                 end = max;
+                rlt++;
             }
         }
         return rlt;
@@ -805,8 +812,8 @@ public class Solution {
      * @return
      */
     public List<List<Integer>> combinationSum2(int[] candidates, int target) {
-        Arrays.sort(candidates);
         var rlt = new ArrayList<List<Integer>>();
+        Arrays.sort(candidates);
         dfs(candidates, target, 0, rlt, new LinkedList<>());
         return rlt;
     }
@@ -842,17 +849,17 @@ public class Solution {
             return rlt;
         }
         for (var i = num1.length() - 1; i >= 0; i--) {
-            var carry = 0;
             var t1 = num1.charAt(i) - '0';
             var builder = new StringBuilder();
             for (var j = num1.length() - 1; j > i; j--) {
                 builder.append('0');
             }
+            var carry = 0;
             for (var k = num2.length() - 1; k >= 0; k--) {
                 var t2 = num2.charAt(k) - '0';
-                var product = t1 * t2 + carry;
-                builder.append(product % 10);
-                carry = product / 10;
+                var sum = t1 * t2 + carry;
+                builder.append(sum % 10);
+                carry = sum / 10;
             }
             if (carry > 0) {
                 builder.append(carry);
@@ -871,7 +878,7 @@ public class Solution {
      */
     public String addStrings(String num1, String num2) {
         var rlt = new StringBuilder();
-        int carry = 0, i = num1.length() - 1, j = num2.length() - 1;
+        int i = num1.length() - 1, j = num2.length() - 1, carry = 0;
         while (i >= 0 || j >= 0 || carry > 0) {
             var t1 = i >= 0 ? num1.charAt(i--) - '0' : 0;
             var t2 = j >= 0 ? num2.charAt(j--) - '0' : 0;
@@ -1051,17 +1058,17 @@ public class Solution {
      * @return
      */
     public int trap(int[] height) {
-        int rlt = 0, l = 0, r = height.length - 1, lm = 0, rm = 0;
+        int l = 0, r = height.length - 1, max = 0, lm = 0, rm = 0;
         while (l < r) {
             lm = Math.max(lm, height[l]);
             rm = Math.max(rm, height[r]);
             if (height[l] < height[r]) {
-                rlt += lm - height[l++];
+                max += lm - height[l++];
                 continue;
             }
-            rlt += rm - height[r--];
+            max += rm - height[r--];
         }
-        return rlt;
+        return max;
     }
 
     /**
@@ -1072,7 +1079,9 @@ public class Solution {
      * @return
      */
     public int strStr(String haystack, String needle) {
-        var rlt = -1;
+        if (Objects.isNull(needle)) {
+            return 0;
+        }
         for (var i = 0; i < haystack.length(); i++) {
             int j = i, k = 0;
             while (j < haystack.length() && k < needle.length()) {
@@ -1086,7 +1095,7 @@ public class Solution {
                 return i;
             }
         }
-        return rlt;
+        return -1;
     }
 
     /**
@@ -1122,7 +1131,7 @@ public class Solution {
      * @return
      */
     public int divide(int dividend, int divisor) {
-        if (0 == dividend) {
+        if (dividend == 0) {
             return 0;
         }
         if (dividend == Integer.MIN_VALUE && divisor == -1) {
@@ -1133,7 +1142,7 @@ public class Solution {
         var divisor_new = Math.abs(divisor * 1L);
         var rlt = 0;
         for (var i = 31; i >= 0; i--) {
-            if ((dividend_new >> i) >= divisor_new) {
+            if (dividend_new >> i >= divisor_new) {
                 rlt += 1 << i;
                 dividend_new -= divisor_new << i;
             }
@@ -1148,8 +1157,8 @@ public class Solution {
      * @return
      */
     public int removeDuplicates(int[] nums) {
-        int i = 0, j = 1;
-        for (; j < nums.length; j++) {
+        int i = 0, j = 1, n = nums.length;
+        for (; j < n; j++) {
             if (nums[i] != nums[j]) {
                 nums[++i] = nums[j];
             }
@@ -1167,17 +1176,15 @@ public class Solution {
         var r = new int[9][9];
         var c = new int[9][9];
         var l = new int[3][3][9];
-        for (var i = 0; i < board.length; i++) {
-            for (var j = 0; j < board[i].length; j++) {
+        int m = board.length, n = board[0].length;
+        for (var i = 0; i < m; i++) {
+            for (var j = 0; j < n; j++) {
                 var temp = board[i][j];
                 if (temp == '.') {
                     continue;
                 }
                 var index = temp - '0' - 1;
-                r[i][index]++;
-                c[j][index]++;
-                l[i / 3][j / 3][index]++;
-                if (r[i][index] > 1 || c[j][index] > 1 || l[i / 3][j / 3][index] > 1) {
+                if (++r[i][index] > 1 || ++c[j][index] > 1 || ++l[i / 3][j / 3][index] > 1) {
                     return false;
                 }
             }
@@ -1338,11 +1345,11 @@ public class Solution {
      */
     public int majorityElement(int[] nums) {
         int rlt = 0, count = 0;
-        for (var i = 0; i < nums.length; i++) {
+        for (var n : nums) {
             if (count == 0) {
-                rlt = nums[i];
+                rlt = n;
             }
-            count += rlt == nums[i] ? 1 : -1;
+            count += n == rlt ? 1 : -1;
         }
         return rlt;
     }
@@ -1384,7 +1391,7 @@ public class Solution {
      * @return
      */
     public int longestValidParentheses(String s) {
-        var rlt = 0;
+        var max = 0;
         var stack = new LinkedList<Integer>() {{
             push(-1);
         }};
@@ -1398,9 +1405,9 @@ public class Solution {
                 stack.push(i);
                 continue;
             }
-            rlt = Math.max(rlt, i - stack.peek());
+            max = Math.max(max, i - stack.peek());
         }
-        return rlt;
+        return max;
     }
 
     /**
@@ -1440,15 +1447,15 @@ public class Solution {
      * @return
      */
     public int maxProfit(int[] prices) {
-        int min = Integer.MAX_VALUE, rlt = 0;
+        int max = 0, min = Integer.MAX_VALUE;
         for (var p : prices) {
             if (min > p) {
                 min = p;
                 continue;
             }
-            rlt = Math.max(rlt, p - min);
+            max = Math.max(max, p - min);
         }
-        return rlt;
+        return max;
     }
 
     /**
@@ -1458,15 +1465,15 @@ public class Solution {
      * @return
      */
     public ListNode deleteDuplicates(ListNode head) {
-        var rlt = new ListNode(0, head);
+        var rlt = head;
         while (Objects.nonNull(head) && Objects.nonNull(head.next)) {
-            if (head == head.next) {
+            if (head.val == head.next.val) {
                 head.next = head.next.next;
                 continue;
             }
             head = head.next;
         }
-        return rlt.next;
+        return rlt;
     }
 
     /**
@@ -1496,23 +1503,23 @@ public class Solution {
      * @return
      */
     public int[] plusOne(int[] digits) {
-        var last = digits[digits.length - 1];
-        last++;
+        var n = digits.length;
+        var last = digits[n - 1] + 1;
         var carry = last / 10;
-        var list = new ArrayList<Integer>();
-        list.add(last % 10);
-        var i = digits.length - 2;
+        last = last % 10;
+        var nums = new ArrayList<Integer>();
+        nums.add(last);
+        var i = n - 2;
         while (i >= 0 || carry > 0) {
-            var t1 = i >= 0 ? digits[i--] : 0;
-            var sum = t1 + carry;
-            list.add(sum % 10);
+            var sum = (i >= 0 ? digits[i--] : 0) + carry;
+            nums.add(sum % 10);
             carry = sum / 10;
         }
-        Collections.reverse(list);
-        var rlt = new int[list.size()];
+        Collections.reverse(nums);
         var index = 0;
-        for (var n : list) {
-            rlt[index++] = n;
+        var rlt = new int[nums.size()];
+        for (var num : nums) {
+            rlt[index++] = num;
         }
         return rlt;
     }
@@ -1540,12 +1547,11 @@ public class Solution {
     }
 
     public boolean dfs(TreeNode p, TreeNode q) {
-        if ((Objects.isNull(p) && Objects.nonNull(q)) ||
-                (Objects.nonNull(p) && Objects.isNull(q))) {
+        if ((Objects.isNull(p) && Objects.nonNull(q)) || (Objects.nonNull(p) && Objects.isNull(q))) {
             return false;
         }
         if (Objects.nonNull(p) && Objects.nonNull(q)) {
-            if (p.val != q.val) {
+            if (q.val != p.val) {
                 return false;
             }
             return dfs(p.left, q.left) && dfs(p.right, q.right);
@@ -1565,7 +1571,7 @@ public class Solution {
         }
         ListNode slow = head, fast = head.next;
         while (Objects.nonNull(fast) && Objects.nonNull(fast.next)) {
-            if (slow == fast) {
+            if (fast == slow) {
                 return true;
             }
             fast = fast.next.next;
@@ -1582,19 +1588,19 @@ public class Solution {
      * @return
      */
     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
-        var merge = merge(nums1, nums2);
-        var n = merge.length;
+        var temp = merge(nums1, nums2);
+        var n = temp.length;
         if ((n & 1) == 1) {
-            return merge[n >> 1];
+            return temp[n >> 1];
         }
         int l = (n >> 1) - 1, r = n >> 1;
-        return (double) (merge[l] + merge[r]) / 2;
+        return (temp[l] + temp[r]) / 2.0d;
     }
 
     public int[] merge(int[] nums1, int[] nums2) {
         int m = nums1.length, m_ = 0, n = nums2.length, n_ = 0, index = 0;
         var rlt = new int[m + n];
-        for (var i = 0; i < rlt.length; i++) {
+        while (index < m + n) {
             if (m_ >= m) {
                 rlt[index++] = nums2[n_++];
             } else if (n_ >= n) {
@@ -1619,7 +1625,7 @@ public class Solution {
         var negative = (n ^ 0) < 0;
         n = negative ? -n : n;
         var rlt = quickPower(x, n);
-        return negative ? 1.0 / rlt : rlt;
+        return negative ? 1.0d / rlt : rlt;
     }
 
     public double quickPower(double x, int n) {
@@ -1673,6 +1679,7 @@ public class Solution {
         return true;
     }
 
+
     /**
      * 66、二叉树的层序遍历
      *
@@ -1713,13 +1720,13 @@ public class Solution {
      */
     public int thirdMax(int[] nums) {
         Arrays.sort(nums);
-        int i = 0, j = 1;
-        for (; j < nums.length; j++) {
+        int i = 0, j = 1, n = nums.length;
+        for (; j < n; j++) {
             if (nums[i] != nums[j]) {
                 nums[++i] = nums[j];
             }
         }
-        ++i;
+        i++;
         return i < 3 ? nums[--i] : nums[i - 3];
     }
 
@@ -1751,7 +1758,7 @@ public class Solution {
         if (arr[start] == 0) {
             return true;
         }
-        path[start] = 1;
+        path[start]++;
         return dfs(arr, start + arr[start], path) || dfs(arr, start - arr[start], path);
     }
 
@@ -1765,17 +1772,20 @@ public class Solution {
     public boolean isIsomorphic(String s, String t) {
         var mapping = new ConcurrentHashMap<Character, Character>();
         var isMapping = new HashSet<Character>();
-        for (var i = 0; i < s.length(); i++) {
-            if (mapping.containsKey(s.charAt(i))) {
-                if (mapping.get(s.charAt(i)) != t.charAt(i)) {
+        var n = s.length();
+        for (var i = 0; i < n; i++) {
+            var c1 = s.charAt(i);
+            var c2 = t.charAt(i);
+            if (mapping.containsKey(c1)) {
+                if (mapping.get(c1) != c2) {
                     return false;
                 }
-            } else {
-                if (!isMapping.add(t.charAt(i))) {
-                    return false;
-                }
-                mapping.put(s.charAt(i), t.charAt(i));
+                continue;
             }
+            if (!isMapping.add(c2)) {
+                return false;
+            }
+            mapping.put(c1, c2);
         }
         return true;
     }
@@ -1787,13 +1797,13 @@ public class Solution {
      * @return
      */
     public int maxProfit2(int[] prices) {
-        int i = 0, j = 1, rlt = 0;
+        int max = 0, i = 0, j = 1;
         for (; j < prices.length; i++, j++) {
-            if (prices[j] > prices[i]) {
-                rlt += prices[j] - prices[i];
+            if (prices[i] < prices[j]) {
+                max += prices[j] - prices[i];
             }
         }
-        return rlt;
+        return max;
     }
 
     /**
@@ -1806,9 +1816,8 @@ public class Solution {
         if (Objects.isNull(matrix) || matrix.length < 1) {
             return new int[]{};
         }
-        int m = matrix.length, n = matrix[0].length;
+        int m = matrix.length, n = matrix[0].length, l = 0, r = n - 1, u = 0, d = m - 1, index = 0;
         var rlt = new int[m * n];
-        int u = 0, d = m - 1, l = 0, r = n - 1, index = 0;
         while (true) {
             for (var i = l; i <= r; i++) {
                 rlt[index++] = matrix[u][i];
@@ -1846,7 +1855,7 @@ public class Solution {
      */
     public int reverse(int x) {
         if (x == 0) {
-            return 0;
+            return x;
         }
         var negative = (x ^ 0) < 0;
         x = negative ? -x : x;
@@ -1884,9 +1893,6 @@ public class Solution {
             return;
         }
         for (var i = index; i < cs.length; i++) {
-            if (i > index && cs[i] == cs[i - 1]) {
-                continue;
-            }
             permutationSwap(cs, i, index);
             dfs(cs, rlt, index + 1);
             permutationSwap(cs, i, index);
@@ -1914,14 +1920,17 @@ public class Solution {
         for (var c : s.toCharArray()) {
             nums[c]++;
         }
-        int rlt = 0;
+        var max = 0;
         for (var i = 0; i < nums.length; i++) {
-            rlt += nums[i] >> 1 << 1;
-            if ((nums[i] & 1) == 1 && (rlt & 1) == 0) {
-                rlt++;
+            if (nums[i] == 0) {
+                continue;
+            }
+            max += nums[i] >> 1 << 1;
+            if ((nums[i] & 1) == 1 && (max & 1) == 0) {
+                max++;
             }
         }
-        return rlt;
+        return max;
     }
 
     /**
@@ -1951,10 +1960,7 @@ public class Solution {
      */
     public List<Integer> spiralOrder2(int[][] matrix) {
         var rlt = new ArrayList<Integer>();
-        if (Objects.isNull(matrix) || matrix.length < 1) {
-            return rlt;
-        }
-        int u = 0, d = matrix.length - 1, l = 0, r = matrix[0].length - 1;
+        int m = matrix.length, n = matrix[0].length, l = 0, r = n - 1, u = 0, d = m - 1;
         while (true) {
             for (var i = l; i <= r; i++) {
                 rlt.add(matrix[u][i]);
@@ -2002,7 +2008,7 @@ public class Solution {
             var path = new ArrayList<Integer>();
             for (var j = 0; j <= i; j++) {
                 if (i - 1 >= 0 && j - 1 >= 0) {
-                    dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
+                    dp[i][j] = dp[i - 1][j] + dp[i - 1][j - 1];
                 }
                 path.add(dp[i][j]);
             }
@@ -2019,17 +2025,16 @@ public class Solution {
      */
     public List<Integer> getRow(int rowIndex) {
         var rlt = new ArrayList<Integer>();
-        var n = rowIndex + 1;
-        var dp = new int[n][n];
-        for (var i = 0; i < n; i++) {
+        var dp = new int[rowIndex + 1][rowIndex + 1];
+        for (var i = 0; i <= rowIndex; i++) {
             for (var j = 0; j <= i; j++) {
                 dp[i][j] = 1;
             }
         }
-        for (var i = 0; i < n; i++) {
+        for (var i = 0; i <= rowIndex; i++) {
             for (var j = 0; j <= i; j++) {
                 if (i - 1 >= 0 && j - 1 >= 0) {
-                    dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
+                    dp[i][j] = dp[i - 1][j] + dp[i - 1][j - 1];
                 }
                 if (i == rowIndex) {
                     rlt.add(dp[i][j]);
@@ -2152,16 +2157,16 @@ public class Solution {
         }
         var nums = new int[n + 1];
         nums[1] = 1;
-        var rlt = 0;
-        for (var i = 0; i <= n; i++) {
+        var max = 0;
+        for (var i = 2; i < nums.length; i++) {
             if ((i & 1) == 0) {
                 nums[i] = nums[i >> 1];
             } else {
                 nums[i] = nums[i >> 1] + nums[(i >> 1) + 1];
             }
-            rlt = Math.max(rlt, nums[i]);
+            max = Math.max(max, nums[i]);
         }
-        return rlt;
+        return max;
     }
 
     /**
@@ -2242,28 +2247,28 @@ public class Solution {
      */
     public int[][] generateMatrix(int n) {
         var rlt = new int[n][n];
-        int l = 0, r = n - 1, u = 0, d = n - 1, index = 0;
+        int l = 0, r = n - 1, u = 0, d = n - 1, index = 1;
         while (true) {
             for (var i = l; i <= r; i++) {
-                rlt[u][i] = ++index;
+                rlt[u][i] = index++;
             }
             if (++u > d) {
                 break;
             }
             for (var i = u; i <= d; i++) {
-                rlt[i][r] = ++index;
+                rlt[i][r] = index++;
             }
             if (--r < l) {
                 break;
             }
             for (var i = r; i >= l; i--) {
-                rlt[d][i] = ++index;
+                rlt[d][i] = index++;
             }
             if (--d < l) {
                 break;
             }
             for (var i = d; i >= u; i--) {
-                rlt[i][l] = ++index;
+                rlt[i][l] = index++;
             }
             if (++l > r) {
                 break;
@@ -2292,12 +2297,11 @@ public class Solution {
         last.next = head;
         last = head;
         k %= n;
-        for (var i = 0; i < (n - k - 1); i++) {
+        for (var i = 0; i < n - k - 1; i++) {
             last = last.next;
         }
-        var prev = last;
-        head = prev.next;
-        prev.next = null;
+        head = last.next;
+        last.next = null;
         return head;
     }
 
@@ -2310,11 +2314,11 @@ public class Solution {
      */
     public char findTheDifference(String s, String t) {
         var nums = new int[128];
-        for (var n : s.toCharArray()) {
-            nums[n]++;
+        for (var c : s.toCharArray()) {
+            nums[c]++;
         }
-        for (var n : t.toCharArray()) {
-            nums[n]--;
+        for (var c : t.toCharArray()) {
+            nums[c]--;
         }
         char rlt = 0;
         for (var i = 0; i < nums.length; i++) {
@@ -2332,13 +2336,13 @@ public class Solution {
      * @param nums
      */
     public void moveZeroes(int[] nums) {
-        int i = 0, j = 0;
-        for (; j < nums.length; j++) {
+        int i = 0, j = 0, n = nums.length;
+        for (; j < n; j++) {
             if (nums[j] != 0) {
                 nums[i++] = nums[j];
             }
         }
-        for (; i < nums.length; i++) {
+        for (; i < n; i++) {
             nums[i] = 0;
         }
     }
@@ -2354,7 +2358,7 @@ public class Solution {
         int l = 0, r = cs.length - 1;
         while (l < r) {
             if (isVowel(cs[l])) {
-                while (r > l) {
+                while (l < r) {
                     try {
                         if (isVowel(cs[r])) {
                             cs[l] ^= cs[r];
@@ -2403,24 +2407,23 @@ public class Solution {
         if (Objects.isNull(s) || k < 1) {
             return s;
         }
-        var rlt = s.toCharArray();
-        var n = rlt.length;
+        var cn = s.toCharArray();
+        var n = cn.length;
         for (var i = 0; i < n; i += k << 1) {
-            var begin = i;
-            var end = i + k - 1;
+            int begin = i, end = begin + k - 1;
             if (end >= n) {
-                end = n - 1;
+                end = --n;
             }
-            swap(begin, end, rlt);
+            swap(begin, end, cn);
         }
-        return new String(rlt);
+        return new String(cn);
     }
 
-    public void swap(int i, int j, char[] nums) {
+    public void swap(int i, int j, char[] cs) {
         while (i < j) {
-            nums[i] ^= nums[j];
-            nums[j] ^= nums[i];
-            nums[i] ^= nums[j];
+            cs[i] ^= cs[j];
+            cs[j] ^= cs[i];
+            cs[i] ^= cs[j];
             i++;
             j--;
         }
@@ -2437,8 +2440,8 @@ public class Solution {
         if (numRows < 2) {
             return s;
         }
-        var nums = new int[numRows][s.length()];
-        int index = 0, r = 0, c = 0, n = s.length();
+        int r = 0, c = 0, n = s.length(), index = 0;
+        var nums = new int[numRows][n];
         while (index < n) {
             while (index < n && r < numRows) {
                 nums[r++][c] = s.charAt(index++);
@@ -2452,9 +2455,10 @@ public class Solution {
         var rlt = new StringBuilder();
         for (var n1 : nums) {
             for (var n2 : n1) {
-                if (n2 != 0) {
-                    rlt.append((char) (n2));
+                if (n2 == 0) {
+                    continue;
                 }
+                rlt.append((char) (n2));
             }
         }
         return rlt.toString();
@@ -2481,27 +2485,26 @@ public class Solution {
     }
 
 
+    /**
+     * 97、解数独
+     */
     static class Sudoku {
         int[][] r = new int[9][9];
         int[][] c = new int[9][9];
         int[][][] l = new int[3][3][9];
-        boolean valid = false;
+        boolean valid;
 
         public boolean check(int i, int j, int k) {
             return r[i][k] > 0 || c[j][k] > 0 || l[i / 3][j / 3][k] > 0;
         }
     }
 
-    /**
-     * 97、解数独
-     *
-     * @param board
-     */
     public void solveSudoku(char[][] board) {
         var s = new Sudoku();
         var free = new ArrayList<int[]>();
-        for (var i = 0; i < board.length; i++) {
-            for (var j = 0; j < board[i].length; j++) {
+        int m = board.length, n = board[0].length;
+        for (var i = 0; i < m; i++) {
+            for (var j = 0; j < n; j++) {
                 var temp = board[i][j];
                 if (temp == '.') {
                     free.add(new int[]{i, j});
@@ -2560,7 +2563,7 @@ public class Solution {
             var temp = reverseKGroup(head, last, k);
             prev.next = temp[0];
             prev = temp[1];
-            head = prev.next;
+            head = head.next;
         }
         return rlt.next;
     }
@@ -2586,11 +2589,11 @@ public class Solution {
      */
     public boolean canConstruct(String ransomNote, String magazine) {
         var nums = new int[128];
-        for (var n : ransomNote.toCharArray()) {
-            nums[n]++;
+        for (var c : ransomNote.toCharArray()) {
+            nums[c]++;
         }
-        for (var n : magazine.toCharArray()) {
-            nums[n]--;
+        for (var c : magazine.toCharArray()) {
+            nums[c]--;
         }
         for (var i = 0; i < nums.length; i++) {
             if (nums[i] > 0) {
@@ -2622,7 +2625,7 @@ public class Solution {
                 end += i;
                 var t2 = s.substring(begin, end);
                 if (!t1.equals(t2)) {
-                    end -= i;
+                    end = -1;
                     break;
                 }
             }
@@ -2640,8 +2643,8 @@ public class Solution {
      * @return
      */
     public int uniqueMorseRepresentations(String[] words) {
-        var nums = new String[]{".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-",
-                ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.."};
+        var nums = new String[]{".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.",
+                "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.."};
         var map = new ConcurrentHashMap<Character, String>() {{
             for (var i = 0; i < 26; i++) {
                 put((char) (i + 'a'), nums[i]);
@@ -2666,10 +2669,11 @@ public class Solution {
      * @return
      */
     public boolean canFormArray(int[] arr, int[][] pieces) {
-        var map = new ConcurrentHashMap<Integer, int[]>();
-        for (var p : pieces) {
-            map.put(p[0], p);
-        }
+        var map = new ConcurrentHashMap<Integer, int[]>() {{
+            for (var p : pieces) {
+                put(p[0], p);
+            }
+        }};
         for (var i = 0; i < arr.length; ) {
             if (!map.containsKey(arr[i])) {
                 return false;
@@ -2776,7 +2780,7 @@ public class Solution {
      * @return
      */
     public int rotatedDigits(int n) {
-        var rlt = 0;
+        var count = 0;
         for (var i = 0; i <= n; i++) {
             var t1 = i;
             var valid = false;
@@ -2792,10 +2796,10 @@ public class Solution {
                 t1 /= 10;
             }
             if (t1 <= 0 && valid) {
-                rlt++;
+                count++;
             }
         }
-        return rlt;
+        return count;
     }
 
     /**
@@ -2812,15 +2816,15 @@ public class Solution {
         var rlt = new int[m * n];
         for (var i = 0; i < m + n - 1; i++) {
             if ((i & 1) == 0) {
-                int r = i < m ? i : m - 1;
-                var c = i < m ? 0 : i - m + 1;
+                var r = i >= m ? m - 1 : i;
+                var c = i >= m ? i - m + 1 : 0;
                 while (r >= 0 && c < n) {
                     rlt[index++] = mat[r--][c++];
                 }
                 continue;
             }
-            int c = i < n ? i : n - 1;
-            var r = i < n ? 0 : i - n + 1;
+            var c = i >= n ? n - 1 : i;
+            var r = i >= n ? i - n + 1 : 0;
             while (r < m && c >= 0) {
                 rlt[index++] = mat[r++][c--];
             }
@@ -2895,11 +2899,11 @@ public class Solution {
         var queue = new LinkedList<TreeNode>() {{
             offer(root);
         }};
-        var j = 0;
+        var i = 0;
         while (!queue.isEmpty()) {
             var n = queue.size();
             var path = new ArrayList<Integer>();
-            for (var i = 0; i < n; i++) {
+            for (var j = 0; j < n; j++) {
                 var temp = queue.poll();
                 path.add(temp.val);
                 if (Objects.nonNull(temp.left)) {
@@ -2909,7 +2913,7 @@ public class Solution {
                     queue.offer(temp.right);
                 }
             }
-            if ((j++ & 1) == 1) {
+            if ((i++ & 1) == 1) {
                 Collections.reverse(path);
             }
             rlt.add(path);
@@ -2954,8 +2958,8 @@ public class Solution {
             }
         }
 
-        int size, capacity;
         Node head, last;
+        int size, capacity;
         Map<Integer, Node> map = new ConcurrentHashMap<>();
 
         public LRUCache(int capacity) {
@@ -2992,9 +2996,9 @@ public class Solution {
         public void put(int key, int value) {
             var n = map.get(key);
             if (Objects.isNull(n)) {
-                size++;
                 n = new Node(key, value);
                 map.put(key, n);
+                size++;
                 if (Objects.isNull(head)) {
                     head = n;
                     last = head;
@@ -3010,10 +3014,10 @@ public class Solution {
                         size--;
                     }
                 }
-            } else {
-                n.value = value;
-                moveToHead(n);
+                return;
             }
+            moveToHead(n);
+            n.value = value;
         }
     }
 
@@ -3027,12 +3031,12 @@ public class Solution {
         if (Objects.isNull(nums) || nums.length < 1) {
             return 0;
         }
-        int max = nums[0], n = nums.length;
+        int n = nums.length, max = nums[0];
         var dp = new int[n];
         dp[0] = nums[0];
         for (var i = 1; i < n; i++) {
             dp[i] = Math.max(nums[i], dp[i - 1] + nums[i]);
-            max = Math.max(max, dp[i]);
+            max = Math.max(dp[i], max);
         }
         return max;
     }
@@ -3068,11 +3072,11 @@ public class Solution {
      * @return
      */
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-        if (Objects.isNull(preorder) || Objects.isNull(inorder) || preorder.length < 1 || inorder.length < 1) {
+        if (Objects.isNull(preorder) || preorder.length < 1 || Objects.isNull(inorder) || inorder.length < 1) {
             return null;
         }
-        var head = new TreeNode(preorder[0]);
         var n = preorder.length;
+        var head = new TreeNode(preorder[0]);
         for (var i = 0; i < n; i++) {
             if (preorder[0] == inorder[i]) {
                 var preorder_l = Arrays.copyOfRange(preorder, 1, i + 1);
@@ -3121,9 +3125,9 @@ public class Solution {
      * @return
      */
     public int numIslands(char[][] grid) {
-        var rlt = 0;
-        for (var i = 0; i < grid.length; i++) {
-            for (var j = 0; j < grid[i].length; j++) {
+        int rlt = 0, m = grid.length, n = grid[0].length;
+        for (var i = 0; i < m; i++) {
+            for (var j = 0; j < n; j++) {
                 rlt += dfs(grid, i, j);
             }
         }
@@ -3151,9 +3155,6 @@ public class Solution {
      * @return
      */
     public ListNode detectCycle(ListNode head) {
-        if (Objects.isNull(head) || Objects.isNull(head.next)) {
-            return null;
-        }
         var set = new HashSet<ListNode>();
         while (Objects.nonNull(head)) {
             if (!set.add(head)) {
@@ -3175,17 +3176,18 @@ public class Solution {
             return new int[][]{{}, {}};
         }
         Arrays.sort(intervals, (x, y) -> x[0] - y[0]);
-        var list = new LinkedList<int[]>();
-        for (var i = 0; i < intervals.length; i++) {
+        var n = intervals.length;
+        var queue = new LinkedList<int[]>();
+        for (var i = 0; i < n; i++) {
             int l = intervals[i][0], r = intervals[i][1];
-            if (list.isEmpty() || list.getLast()[1] < l) {
-                list.add(new int[]{l, r});
+            if (queue.isEmpty() || queue.getLast()[1] < l) {
+                queue.add(new int[]{l, r});
                 continue;
             }
-            var temp = list.getLast();
+            var temp = queue.getLast();
             temp[1] = Math.max(temp[1], r);
         }
-        return list.toArray(new int[list.size()][2]);
+        return queue.toArray(new int[queue.size()][2]);
     }
 
     /**
@@ -3203,11 +3205,11 @@ public class Solution {
         Arrays.fill(dp, 1);
         for (var i = 1; i < n; i++) {
             for (var j = 0; j < i; j++) {
-                if (nums[j] < nums[i]) {
+                if (nums[i] > nums[j]) {
                     dp[i] = Math.max(dp[i], dp[j] + 1);
                 }
-                max = Math.max(max, dp[i]);
             }
+            max = Math.max(dp[i], max);
         }
         return max;
     }
@@ -3240,7 +3242,7 @@ public class Solution {
      * @param root
      * @return
      */
-    int max;
+    int max = 0;
 
     public int diameterOfBinaryTree(TreeNode root) {
         maxDiameter(root);
@@ -3253,7 +3255,7 @@ public class Solution {
         }
         var l = maxDiameter(n.left);
         var r = maxDiameter(n.right);
-        max = Math.max(max, l + r);
+        max = Math.max(l + r, max);
         return 1 + Math.max(l, r);
     }
 
@@ -3283,9 +3285,9 @@ public class Solution {
     public boolean isValidBST(TreeNode root) {
         var list = new ArrayList<Integer>();
         inOrder(root, list);
-        int i = 0, j = 1;
-        for (; j < list.size(); i++, j++) {
-            if (list.get(j) <= list.get(i)) {
+        int i = 0, j = 1, n = list.size();
+        for (; j < n; i++, j++) {
+            if (list.get(i) >= list.get(j)) {
                 return false;
             }
         }
@@ -3309,7 +3311,7 @@ public class Solution {
      * @return
      */
     public int findLength(int[] nums1, int[] nums2) {
-        int m = nums1.length, n = nums2.length, max = 0;
+        int max = 0, m = nums1.length, n = nums2.length;
         var dp = new int[m + 1][n + 1];
         for (var i = 1; i <= m; i++) {
             for (var j = 1; j <= n; j++) {
@@ -3383,7 +3385,7 @@ public class Solution {
         }
 
         public int deleteHead() {
-            if (size < 1) {
+            if (size == 0) {
                 return -1;
             }
             size--;
@@ -3527,9 +3529,9 @@ public class Solution {
         dp[0] = nums[0];
         dp[1] = Math.max(nums[0], nums[1]);
         for (var i = 2; i < n; i++) {
-            dp[i] = Math.max(dp[i - 1], dp[i - 2] + nums[i]);
+            dp[i] = Math.max(dp[i - 2] + nums[i], dp[i - 1]);
         }
-        return dp[--n];
+        return dp[n - 1];
     }
 
     /**
@@ -3577,16 +3579,16 @@ public class Solution {
      * @return
      */
     public int reverseBits(int num) {
-        int max = 0, count = 0, prev = 0;
+        int max = 0, prev = 0, count = 0;
         for (var i = 31; i >= 0; i--) {
             if (((num >> i) & 1) == 1) {
-                count++;
                 prev++;
+                count++;
             } else {
                 count = ++prev;
                 prev = 0;
             }
-            max = Math.max(count, max);
+            max = Math.max(max, count);
         }
         return max;
     }
@@ -3601,8 +3603,9 @@ public class Solution {
     boolean valid = false;
 
     public boolean exist(char[][] board, String word) {
-        for (var i = 0; i < board.length; i++) {
-            for (var j = 0; j < board[i].length; j++) {
+        int m = board.length, n = board[0].length;
+        for (var i = 0; i < m; i++) {
+            for (var j = 0; j < n; j++) {
                 dfs(board, word, 0, i, j);
             }
         }
@@ -3610,7 +3613,7 @@ public class Solution {
     }
 
     public void dfs(char[][] board, String word, int index, int i, int j) {
-        if ((i < 0 || i >= board.length) || (j < 0 || j >= board[0].length) || word.charAt(index) != board[i][j]) {
+        if ((i < 0 || i >= board.length) || (j < 0 || j >= board[0].length) || board[i][j] != word.charAt(index)) {
             return;
         }
         if (index == word.length() - 1) {
@@ -3671,11 +3674,11 @@ public class Solution {
 
     public void dfs(int index, char[] cs, Set<String> rlt) {
         if (index >= cs.length) {
-            var builder = new StringBuilder();
+            var path = new StringBuilder();
             for (var c : cs) {
-                builder.append(c);
+                path.append(c);
             }
-            rlt.add(builder.toString());
+            rlt.add(path.toString());
             return;
         }
         for (var i = index; i < cs.length; i++) {
@@ -3732,13 +3735,13 @@ public class Solution {
      *
      * @param root
      */
-    TreeNode l1 = null, l2 = null, prev = new TreeNode(Integer.MIN_VALUE);
+    TreeNode t1 = null, t2 = null, prev = new TreeNode(Integer.MIN_VALUE);
 
     public void recoverTree(TreeNode root) {
         inOrder(root);
-        l1.val ^= l2.val;
-        l2.val ^= l1.val;
-        l1.val ^= l2.val;
+        t1.val ^= t2.val;
+        t2.val ^= t1.val;
+        t1.val ^= t2.val;
     }
 
     public void inOrder(TreeNode root) {
@@ -3747,10 +3750,10 @@ public class Solution {
         }
         inOrder(root.left);
         if (prev.val > root.val) {
-            if (Objects.isNull(l1)) {
-                l1 = prev;
+            if (Objects.isNull(t1)) {
+                t1 = prev;
             }
-            l2 = root;
+            t2 = root;
         }
         prev = root;
         inOrder(root.right);
@@ -3764,22 +3767,22 @@ public class Solution {
      * @return
      */
     public boolean checkSubarraySum(int[] nums, int k) {
-        if (Objects.isNull(nums) || nums.length < 2) {
+        if (Objects.isNull(nums) || nums.length < 1) {
             return false;
         }
-        int temp = 0, n = nums.length;
         var map = new ConcurrentHashMap<Integer, Integer>() {{
             put(0, -1);
         }};
+        int n = nums.length, prev = 0;
         for (var i = 0; i < n; i++) {
-            temp = ((temp % k) + (nums[i] % k)) % k;
-            if (map.containsKey(temp)) {
-                if (i - map.get(temp) >= 2) {
+            prev = ((prev % k) + (nums[i] % k)) % k;
+            if (map.containsKey(prev)) {
+                if (i - map.get(prev) >= 2) {
                     return true;
                 }
                 continue;
             }
-            map.put(temp, i);
+            map.put(prev, i);
         }
         return false;
     }
@@ -3814,14 +3817,14 @@ public class Solution {
         if (Objects.isNull(nums) || nums.length < 1) {
             return false;
         }
-        int max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
+        int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
         var set = new HashSet<Integer>();
         for (var n : nums) {
             if (n == 0) {
                 continue;
             }
-            max = Math.max(max, n);
             min = Math.min(min, n);
+            max = Math.max(max, n);
             if (!set.add(n)) {
                 return false;
             }
@@ -3837,9 +3840,9 @@ public class Solution {
      */
     public int maximumSwap(int num) {
         var cs = String.valueOf(num).toCharArray();
-        int max = cs.length - 1, i = -1, j = -1, n = cs.length - 1;
+        int n = cs.length, max = n - 1, i = -1, j = -1;
         for (var k = n - 1; k >= 0; k--) {
-            if (cs[k] > cs[max]) {
+            if (cs[max] < cs[k]) {
                 max = k;
             }
             if (cs[k] < cs[max]) {
@@ -3847,12 +3850,12 @@ public class Solution {
                 j = max;
             }
         }
-        if (i >= 0) {
+        if (i >= 0 && j >= 0) {
             cs[i] ^= cs[j];
             cs[j] ^= cs[i];
             cs[i] ^= cs[j];
         }
-        return Integer.valueOf(new String(cs));
+        return Integer.parseInt(new String(cs));
     }
 
     /**
@@ -3862,17 +3865,17 @@ public class Solution {
      * @return
      */
     public ListNode oddEvenList(ListNode head) {
-        if (Objects.isNull(head) || Objects.isNull(head.next)) {
-            return head;
+        if (Objects.isNull(head)) {
+            return null;
         }
-        ListNode odd = head, even = head.next, temp = even;
+        ListNode odd = head, even = head.next, even_head = even;
         while (Objects.nonNull(even) && Objects.nonNull(even.next)) {
             odd.next = even.next;
             odd = odd.next;
             even.next = odd.next;
             even = even.next;
         }
-        odd.next = temp;
+        odd.next = even_head;
         return head;
     }
 
@@ -3884,27 +3887,26 @@ public class Solution {
      * @return
      */
     public String removeKdigits(String num, int k) {
-        var queue = new LinkedList<Character>();
-        for (var i = 0; i < num.length(); i++) {
-            var c = num.charAt(i);
-            while (!queue.isEmpty() && k > 0 && queue.peekLast() > c) {
+        var stack = new LinkedList<Character>();
+        for (var n : num.toCharArray()) {
+            while (!stack.isEmpty() && k > 0 && stack.peekLast() > n) {
+                stack.pollLast();
                 k--;
-                queue.pollLast();
             }
-            queue.offerLast(c);
+            stack.offerLast(n);
         }
         for (var i = 0; i < k; i++) {
-            queue.pollLast();
+            stack.pollLast();
         }
-        var rlt = new StringBuilder();
         var valid = true;
-        while (!queue.isEmpty()) {
-            var c = queue.pollFirst();
-            if (valid && c == '0') {
+        var rlt = new StringBuilder();
+        while (!stack.isEmpty()) {
+            var temp = stack.pollFirst();
+            if (valid && temp == '0') {
                 continue;
             }
             valid = false;
-            rlt.append(c);
+            rlt.append(temp);
         }
         return rlt.length() < 1 ? "0" : rlt.toString();
     }
@@ -3916,7 +3918,7 @@ public class Solution {
      * @return
      */
     public int candy(int[] ratings) {
-        int n = ratings.length, rlt = 0;
+        int max = 0, n = ratings.length, count = 0;
         var nums = new int[n];
         Arrays.fill(nums, 1);
         for (var i = 0; i < n; i++) {
@@ -3924,16 +3926,16 @@ public class Solution {
                 nums[i] = nums[i - 1] + 1;
             }
         }
-        var count = 0;
         for (var i = n - 1; i >= 0; i--) {
             if (i < n - 1 && ratings[i] > ratings[i + 1]) {
                 count++;
             } else {
                 count = 1;
             }
-            rlt += Math.max(nums[i], count);
+            nums[i] = Math.max(nums[i], count);
+            max += nums[i];
         }
-        return rlt;
+        return max;
     }
 
     /**
@@ -3943,7 +3945,10 @@ public class Solution {
      * @return
      */
     public int longestIncreasingPath2(int[][] matrix) {
-        int rlt = 0, m = matrix.length, n = matrix[0].length;
+        if (Objects.isNull(matrix) || matrix.length < 1) {
+            return 0;
+        }
+        int m = matrix.length, n = matrix[0].length, rlt = 0;
         var path = new int[m][n];
         for (var i = 0; i < m; i++) {
             for (var j = 0; j < n; j++) {
@@ -3978,9 +3983,9 @@ public class Solution {
      * @return
      */
     public ListNode partition(ListNode head, int x) {
-        var small = new ListNode(0);
+        var small = new ListNode(0, head);
         var small_head = small;
-        var large = new ListNode(0);
+        var large = new ListNode(0, head);
         var large_head = large;
         while (Objects.nonNull(head)) {
             if (head.val < x) {
@@ -4019,12 +4024,32 @@ public class Solution {
     }
 
     /**
-     * 150、下一个更大元素
+     * 150、下一个更大元素II
      *
      * @param nums
      * @return
      */
     public int[] nextGreaterElements(int[] nums) {
+        int n = nums.length;
+        var rlt = new int[n];
+        Arrays.fill(rlt, -1);
+        var s = new LinkedList<Integer>();
+        for (var i = 0; i < n << 1; i++) {
+            while (!s.isEmpty() && nums[i % n] > nums[s.peek()]) {
+                rlt[s.pop()] = nums[i % n];
+            }
+            s.push(i % n);
+        }
+        return rlt;
+    }
+
+    /**
+     * 158、下一个更大元素I
+     *
+     * @param nums
+     * @return
+     */
+    public int[] nextGreaterElements2(int[] nums) {
         var n = nums.length;
         var stack = new LinkedList<Integer>();
         var map = new ConcurrentHashMap<Integer, Integer>() {{
@@ -4077,10 +4102,10 @@ public class Solution {
      * @return
      */
     public int largestRectangleArea(int[] heights) {
-        var n = heights.length;
+        int n = heights.length, max = 0;
+        var stack = new LinkedList<Integer>();
         var l = new int[n];
         var r = new int[n];
-        var stack = new LinkedList<Integer>();
         Arrays.fill(r, n);
         for (var i = 0; i < n; i++) {
             while (!stack.isEmpty() && heights[stack.peek()] >= heights[i]) {
@@ -4090,7 +4115,6 @@ public class Solution {
             l[i] = stack.isEmpty() ? -1 : stack.peek();
             stack.push(i);
         }
-        var max = 0;
         for (var i = 0; i < n; i++) {
             max = Math.max(max, (r[i] - l[i] - 1) * heights[i]);
         }
@@ -4104,15 +4128,17 @@ public class Solution {
      * @return
      */
     public int findRepeatNumber(int[] nums) {
+        if (Objects.isNull(nums) || nums.length < 1) {
+            return 0;
+        }
         Arrays.sort(nums);
-        int n = nums.length, rlt = 0;
+        var n = nums.length;
         for (var i = 0; i < n; i++) {
             if (i > 0 && nums[i] == nums[i - 1]) {
-                rlt = nums[i];
-                break;
+                return nums[i];
             }
         }
-        return rlt;
+        return 0;
     }
 
     /**
@@ -4123,21 +4149,224 @@ public class Solution {
      * @return
      */
     public boolean searchMatrix(int[][] matrix, int target) {
-        int m = matrix.length, n = matrix[0].length;
-        int l = 0, r = m * n - 1;
+        int m = matrix.length, n = matrix[0].length, l = 0, r = m * n - 1;
         while (l <= r) {
             var mid = ((r - l) >> 1) + l;
-            var c = matrix[mid / n][mid % n];
-            if (c == target) {
+            var num = matrix[mid / n][mid % n];
+            if (num == target) {
                 return true;
             }
-            if (c > target) {
-                r = --mid;
-            } else {
+            if (num < target) {
                 l = ++mid;
+            } else {
+                r = --mid;
             }
         }
         return false;
+    }
+
+    /**
+     * 155、左叶子之和
+     *
+     * @param root
+     * @return
+     */
+    public int sumOfLeftLeaves(TreeNode root) {
+        if (Objects.isNull(root)) {
+            return 0;
+        }
+        return dfs(root);
+    }
+
+    public int dfs(TreeNode n) {
+        var rlt = 0;
+        if (Objects.nonNull(n.left)) {
+            rlt += isLeafNode(n.left) ? n.left.val : dfs(n.left);
+        }
+        if (Objects.nonNull(n.right) && !isLeafNode(n.right)) {
+            rlt += dfs(n.right);
+        }
+        return rlt;
+    }
+
+    public boolean isLeafNode(TreeNode n) {
+        return Objects.isNull(n.left) && Objects.isNull(n.right);
+    }
+
+    /**
+     * 156、最小栈
+     */
+    class MinStack {
+        LinkedList<Integer> s1 = new LinkedList<>();
+        LinkedList<Integer> s2 = new LinkedList<>();
+
+        public MinStack() {
+            s2.push(Integer.MAX_VALUE);
+        }
+
+        public void push(int val) {
+            s1.push(val);
+            s2.push(Math.min(s2.peek(), val));
+        }
+
+        public void pop() {
+            s1.pop();
+            s2.pop();
+        }
+
+        public int top() {
+            return s1.peek();
+        }
+
+        public int getMin() {
+            return s2.peek();
+        }
+    }
+
+    /**
+     * 159、在排序数组中查找元素的第一个和最后一个位置
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int[] searchRange(int[] nums, int target) {
+        int l = 0, r = nums.length - 1;
+        while (l <= r) {
+            var mid = ((r - l) >> 1) + l;
+            if (nums[mid] == target) {
+                int first = mid, last = mid;
+                while (first >= 0 && nums[first] == nums[mid]) {
+                    first--;
+                }
+                while (last <= r && nums[last] == nums[mid]) {
+                    last++;
+                }
+                return new int[]{++first, --last};
+            }
+            if (nums[mid] < target) {
+                l = ++mid;
+            } else {
+                r = --mid;
+            }
+        }
+        return new int[]{-1, -1};
+    }
+
+    /**
+     * 160、字母异位词分组
+     *
+     * @param strs
+     * @return
+     */
+    public List<List<String>> groupAnagrams(String[] strs) {
+        var map = new ConcurrentHashMap<String, List<String>>();
+        for (var s : strs) {
+            var cs = s.toCharArray();
+            Arrays.sort(cs);
+            var key = new String(cs);
+            var list = map.getOrDefault(key, new ArrayList<>());
+            list.add(new String(s.toCharArray()));
+            if (!map.containsKey(key)) {
+                map.put(key, list);
+            }
+        }
+        return new ArrayList<>(map.values());
+    }
+
+    /**
+     * 161、反转链表II
+     *
+     * @param head
+     * @param left
+     * @param right
+     * @return
+     */
+    public ListNode reverseBetween(ListNode head, int left, int right) {
+        ListNode temp = new ListNode(0, head), rlt = temp, prev = null;
+        int index = 1, count = 0;
+        while (Objects.nonNull(temp)) {
+            if (count > 0) {
+                count++;
+            }
+            if (index == left) {
+                count = 1;
+                prev = temp;
+            }
+            if (index == right) {
+                temp = temp.next;
+                break;
+            }
+            index++;
+            temp = temp.next;
+        }
+        prev.next = reverseBetween(prev.next, temp, count);
+        return rlt.next;
+    }
+
+    public ListNode reverseBetween(ListNode head, ListNode last, int k) {
+        ListNode l1 = last.next, l2 = head;
+        while (k-- > 0) {
+            var next = l2.next;
+            l2.next = l1;
+            l1 = l2;
+            l2 = next;
+        }
+        return last;
+    }
+
+
+    /**
+     * 162、插入区间
+     *
+     * @param intervals
+     * @param newInterval
+     * @return
+     */
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        if (Objects.isNull(intervals) || intervals.length < 1) {
+            return new int[][]{newInterval};
+        }
+        intervals = merge(intervals, newInterval);
+        Arrays.sort(intervals, (x, y) -> x[0] - y[0]);
+        var list = new LinkedList<int[]>();
+        var n = intervals.length;
+        for (var i = 0; i < n; i++) {
+            int l = intervals[i][0], r = intervals[i][1];
+            while (list.isEmpty() || list.getLast()[1] < l) {
+                list.add(new int[]{l, r});
+                continue;
+            }
+            var temp = list.getLast();
+            temp[1] = Math.max(temp[1], r);
+        }
+        return list.toArray(new int[list.size()][2]);
+    }
+
+    public int[][] merge(int[][] intervals, int[] newInterval) {
+        int m = intervals.length, n = intervals[0].length;
+        var rlt = new int[m + 1][n];
+        for (var i = 0; i < m; i++) {
+            rlt[i] = intervals[i];
+        }
+        rlt[m] = newInterval;
+        return rlt;
+    }
+
+    /**
+     * 163、字符串中的最大奇数
+     *
+     * @param num
+     * @return
+     */
+    public String largestOddNumber(String num) {
+        var n = num.length();
+        for (var i = n - 1; i >= 0; i--) {
+            if ((num.charAt(i) & 1) == 1) {
+                return num.substring(0, ++i);
+            }
+        }
+        return "";
     }
 
     /**
@@ -4174,7 +4403,7 @@ public class Solution {
     }
 
     /**
-     * 163、根据前序和后序遍历构造二叉树
+     * 157、根据前序和后序遍历构造二叉树
      *
      * @param preorder
      * @param postorder
@@ -4539,6 +4768,9 @@ public class Solution {
         Assert.assertEquals("10101", solution.addBinary("1010", "1011"));
         // 加一
         System.out.println("加一:");
+        nums = solution.plusOne(new int[]{9});
+        Arrays.stream(nums).forEach(System.out::print);
+        System.out.println();
         nums = solution.plusOne(new int[]{1, 2, 3});
         Arrays.stream(nums).forEach(System.out::print);
         System.out.println();
@@ -4814,6 +5046,7 @@ public class Solution {
         System.out.println(solution.permuteUnique(new int[]{1, 1, 2}));
         System.out.println(solution.permuteUnique(new int[]{1, 2, 3}));
         // 旋转数字
+        Assert.assertEquals(1, solution.rotatedDigits(2));
         Assert.assertEquals(4, solution.rotatedDigits(10));
         // 对角线遍历
         System.out.println("对角线遍历:");
@@ -5000,9 +5233,9 @@ public class Solution {
         }
         System.out.println();
         // 打家劫舍
+        Assert.assertEquals(4, solution.rob(new int[]{1, 2, 3, 1}));
         Assert.assertEquals(2, solution.rob(new int[]{1, 2}));
         Assert.assertEquals(4, solution.rob(new int[]{1, 2, 3}));
-        Assert.assertEquals(4, solution.rob(new int[]{1, 2, 3, 1}));
         Assert.assertEquals(12, solution.rob(new int[]{2, 7, 9, 3, 1}));
         Assert.assertEquals(4, solution.rob(new int[]{2, 1, 1, 2}));
         // 排序数组
@@ -5063,6 +5296,7 @@ public class Solution {
         Assert.assertEquals(false, solution.isStraight(new int[]{0, 0, 1, 2, 11}));
         Assert.assertEquals(false, solution.isStraight(new int[]{0, 0, 2, 2, 5}));
         // 最大交换
+        Assert.assertEquals(98863, solution.maximumSwap(98368));
         Assert.assertEquals(7236, solution.maximumSwap(2736));
         Assert.assertEquals(9973, solution.maximumSwap(9973));
         Assert.assertEquals(4132, solution.maximumSwap(2134));
@@ -5134,12 +5368,19 @@ public class Solution {
             System.out.print(c + " ");
         }
         System.out.println();
-        nums = solution.nextGreaterElements(new int[]{1, 2, 3, 4, 3});
+        // 下一个更大元素I
+        System.out.println("下一个更大元素I:");
+        nums = solution.nextGreaterElements2(new int[]{1, 2, 1});
         for (var c : nums) {
             System.out.print(c + " ");
         }
         System.out.println();
-        nums = solution.nextGreaterElements(new int[]{100, 1, 11, 1, 120, 111, 123, 1, -1, -100});
+        nums = solution.nextGreaterElements2(new int[]{1, 2, 3, 4, 3});
+        for (var c : nums) {
+            System.out.print(c + " ");
+        }
+        System.out.println();
+        nums = solution.nextGreaterElements2(new int[]{100, 1, 11, 1, 120, 111, 123, 1, -1, -100});
         for (var c : nums) {
             System.out.print(c + " ");
         }
@@ -5176,5 +5417,98 @@ public class Solution {
                 {10, 11, 16, 20},
                 {23, 30, 34, 60}};
         Assert.assertEquals(false, solution.searchMatrix(matrix, 21));
+        // 左叶子之和
+        Assert.assertEquals(24, solution.sumOfLeftLeaves(new TreeNode(3, new TreeNode(9), new TreeNode(20, new TreeNode(15), new TreeNode(7)))));
+        Assert.assertEquals(0, solution.sumOfLeftLeaves(new TreeNode(1)));
+        // 在排序数组中查找元素的第一个和最后一个位置
+        System.out.println("在排序数组中查找元素的第一个和最后一个位置:");
+        nums = solution.searchRange(new int[]{5, 7, 7, 8, 8, 10}, 8);
+        for (var c : nums) {
+            System.out.print(c + " ");
+        }
+        System.out.println();
+        nums = solution.searchRange(new int[]{5, 7, 7, 8, 8, 10}, 6);
+        for (var c : nums) {
+            System.out.print(c + " ");
+        }
+        System.out.println();
+        nums = solution.searchRange(new int[]{}, 0);
+        for (var c : nums) {
+            System.out.print(c + " ");
+        }
+        System.out.println();
+        nums = solution.searchRange(new int[]{3, 3, 3}, 3);
+        for (var c : nums) {
+            System.out.print(c + " ");
+        }
+        System.out.println();
+        // 字母异位词分组
+        System.out.println("字母异位词分组:");
+        System.out.println(solution.groupAnagrams(new String[]{"abc", "cba", "bac"}));
+        System.out.println(solution.groupAnagrams(new String[]{"eat", "tea", "tan", "ate", "nat", "bat"}));
+        System.out.println(solution.groupAnagrams(new String[]{""}));
+        System.out.println(solution.groupAnagrams(new String[]{"a"}));
+        // 反转链表II
+        System.out.println("反转链表II:");
+        ln1 = solution.reverseBetween(new ListNode(1, new ListNode(2, new ListNode(3, new ListNode(4, new ListNode(5))))), 2, 4);
+        while (Objects.nonNull(ln1)) {
+            System.out.println(ln1.val + " ");
+            ln1 = ln1.next;
+        }
+        System.out.println();
+        ln1 = solution.reverseBetween(new ListNode(5), 1, 1);
+        while (Objects.nonNull(ln1)) {
+            System.out.println(ln1.val + " ");
+            ln1 = ln1.next;
+        }
+        System.out.println();
+        ln1 = solution.reverseBetween(new ListNode(3, new ListNode(5)), 1, 2);
+        while (Objects.nonNull(ln1)) {
+            System.out.println(ln1.val + " ");
+            ln1 = ln1.next;
+        }
+        System.out.println();
+        // 插入区间
+        System.out.println("插入区间:");
+        var intervals = solution.insert(new int[][]{{1, 3}, {6, 9}}, new int[]{2, 5});
+        for (var i = 0; i < intervals.length; i++) {
+            for (var j = 0; j < intervals[i].length; j++) {
+                System.out.print(intervals[i][j] + " ");
+            }
+            System.out.println();
+        }
+        intervals = solution.insert(new int[][]{{1, 2}, {3, 5}, {6, 7}, {8, 10}, {12, 16}}, new int[]{4, 8});
+        for (var i = 0; i < intervals.length; i++) {
+            for (var j = 0; j < intervals[i].length; j++) {
+                System.out.print(intervals[i][j] + " ");
+            }
+            System.out.println();
+        }
+        intervals = solution.insert(new int[][]{}, new int[]{5, 7});
+        for (var i = 0; i < intervals.length; i++) {
+            for (var j = 0; j < intervals[i].length; j++) {
+                System.out.print(intervals[i][j] + " ");
+            }
+            System.out.println();
+        }
+        intervals = solution.insert(new int[][]{{1, 5}}, new int[]{2, 3});
+        for (var i = 0; i < intervals.length; i++) {
+            for (var j = 0; j < intervals[i].length; j++) {
+                System.out.print(intervals[i][j] + " ");
+            }
+            System.out.println();
+        }
+        intervals = solution.insert(new int[][]{{1, 5}}, new int[]{2, 7});
+        for (var i = 0; i < intervals.length; i++) {
+            for (var j = 0; j < intervals[i].length; j++) {
+                System.out.print(intervals[i][j] + " ");
+            }
+            System.out.println();
+        }
+        // 字符串中的最大奇数
+        Assert.assertEquals("4237", solution.largestOddNumber("4237"));
+        Assert.assertEquals("5", solution.largestOddNumber("52"));
+        Assert.assertEquals("15", solution.largestOddNumber("152"));
+        Assert.assertEquals("415", solution.largestOddNumber("41522"));
     }
 }

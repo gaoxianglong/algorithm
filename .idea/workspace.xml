@@ -5,19 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="07b2a524-0ff7-47ab-85c6-5a1c982c22d2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/github/algorithm/QueueTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/github/algorithm/RandomINdex.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/github/algorithm/Test.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/github/algorithm/Test2.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/github/bookkeeper/use/Starter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/github/bookkeeper/use/Starter2.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/github/zookeeper/Starter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/logback.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/github/algorithm/RandomINdex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/algorithm/RandomINdex.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/github/algorithm/Solution.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/algorithm/Solution.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/github/algorithm/Solution2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/algorithm/Solution2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/github/algorithm/Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/algorithm/Test.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/github/data_structure/RBTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/data_structure/RBTree.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -114,8 +105,8 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Test (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.github.algorithm.Test" />
+    <configuration name="Solution2" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.github.algorithm.Solution2" />
       <module name="algorithm" />
       <extension name="coverage">
         <pattern>
@@ -127,9 +118,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Test" />
+    <configuration name="Test (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.github.algorithm.Test" />
       <module name="algorithm" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.github.algorithm.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -148,17 +145,17 @@
     <list>
       <item itemvalue="Application.RBTree" />
       <item itemvalue="Application.Solution" />
-      <item itemvalue="Application.Test" />
       <item itemvalue="Application.RandomINdex" />
       <item itemvalue="Application.Test (1)" />
+      <item itemvalue="Application.Solution2" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.RBTree" />
-        <item itemvalue="Application.Solution" />
-        <item itemvalue="Application.Test (1)" />
         <item itemvalue="Application.RandomINdex" />
-        <item itemvalue="Application.Test" />
+        <item itemvalue="Application.Test (1)" />
+        <item itemvalue="Application.Solution" />
+        <item itemvalue="Application.Solution2" />
       </list>
     </recent_temporary>
   </component>
@@ -250,7 +247,19 @@
       <workItem from="1667055371411" duration="7403000" />
       <workItem from="1667095928920" duration="9902000" />
       <workItem from="1667201769916" duration="11047000" />
-      <workItem from="1667293122335" duration="2635000" />
+      <workItem from="1667293122335" duration="5547000" />
+      <workItem from="1667368164269" duration="11925000" />
+      <workItem from="1667409330081" duration="559000" />
+      <workItem from="1667549456528" duration="11021000" />
+      <workItem from="1667721963396" duration="13312000" />
+      <workItem from="1667800516118" duration="16182000" />
+      <workItem from="1668236728313" duration="29186000" />
+      <workItem from="1668585305212" duration="801000" />
+      <workItem from="1668748664295" duration="19614000" />
+      <workItem from="1668912482682" duration="11905000" />
+      <workItem from="1669088615081" duration="14106000" />
+      <workItem from="1669113368280" duration="2533000" />
+      <workItem from="1669180509062" duration="2240000" />
     </task>
     <servers />
   </component>
@@ -289,7 +298,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/github/algorithm/Solution.java</url>
-          <line>959</line>
+          <line>966</line>
           <option name="timeStamp" value="94" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -299,7 +308,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/github/algorithm/RandomINdex.java</url>
-          <line>30</line>
+          <line>34</line>
           <option name="timeStamp" value="164" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -319,7 +328,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/github/algorithm/RandomINdex.java</url>
-          <line>17</line>
+          <line>21</line>
           <option name="timeStamp" value="341" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -441,11 +450,6 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/github/algorithm/Solution2.java</url>
           <line>4020</line>
           <option name="timeStamp" value="479" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/github/algorithm/Solution.java</url>
-          <line>3313</line>
-          <option name="timeStamp" value="486" />
         </line-breakpoint>
         <breakpoint enabled="true" type="java-exception">
           <properties class="java.util.NoSuchElementException" package="java.util" />

@@ -96,10 +96,18 @@ public class Test {
     public static void main(String[] args) {
         //new Test().run();
 //        Arrays.stream(new Test().nextGreaterElement(new int[]{4, 1, 2}, new int[]{1, 3, 4, 2})).forEach(System.out::println);
-        Arrays.stream(new Test().nextGreaterElement2(new int[]{1, 2, 3, 4, 3})).forEach(System.out::println);
-        System.out.println();
-        Arrays.stream(new Test().nextGreaterElement2(new int[]{5, 4, 3, 2, 1})).forEach(System.out::println);
-        System.out.println();
-        Arrays.stream(new Test().nextGreaterElement2(new int[]{100, 1, 11, 1, 120, 111, 123, 1, -1, -100})).forEach(System.out::println);
+//        Arrays.stream(new Test().nextGreaterElement2(new int[]{1, 2, 3, 4, 3})).forEach(System.out::println);
+//        System.out.println();
+//        Arrays.stream(new Test().nextGreaterElement2(new int[]{5, 4, 3, 2, 1})).forEach(System.out::println);
+//        System.out.println();
+//        Arrays.stream(new Test().nextGreaterElement2(new int[]{100, 1, 11, 1, 120, 111, 123, 1, -1, -100})).forEach(System.out::println);
+        var builder = new StringBuilder();
+        builder.append('_');
+        for (var i = 0; i < 22; i++) {
+            builder.append((char) (Math.random() * 26 + 'A'));
+        }
+        builder.append('2');
+        System.out.println(builder.toString());
+        System.out.println("refreshed".toUpperCase());
     }
 }
